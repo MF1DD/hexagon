@@ -1,0 +1,70 @@
+{
+  "name": "strenges/projekt",
+  "version": "20250712",
+  "require": {
+    "php": "^8.3",
+    "slim/slim": "^4.14",
+    "symfony/console": "^7.3",
+    "slim/psr7": "^1.7"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "^12.0",
+    "friendsofphp/php-cs-fixer": "v3.84.0",
+    "phpstan/phpstan": "^2.1.18",
+    "rector/rector": "^2.1.1",
+    "phpspec/phpspec": "^7.6.0",
+    "behat/behat": "^v3.23.0",
+    "infection/infection": "^0.30.3",
+    "squizlabs/php_codesniffer": "^3.13.2",
+    "vimeo/psalm": "^6.13.0",
+    "guzzlehttp/guzzle": "^7.9.3",
+    "deptrac/deptrac": "^3.0.0",
+    "phpunit/php-code-coverage": "^12.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bin\\Console\\": "bin/",
+      "App\\": "src/App/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Utils\\Rector\\": ".qa/rector/src",
+      "Utils\\Rector\\Tests\\": ".qa/rector/tests",
+      "Tests\\": "Tests/",
+      "Tests\\Unit\\": "Tests/Unit/",
+      "Tests\\Spec\\": "Tests/Spec/",
+      "Tests\\Behat\\": "Tests/Behat",
+      "Tests\\Helper\\": "Tests/Helper",
+      "Utils\\PHPStan\\": ".qa/phpstan/src",
+      "Tests\\PHPStan\\": ".qa/phpstan/tests"
+    }
+  },
+  "scripts": {
+    "style:cs": "php-cs-fixer check -v --config=.qa/php-cs-fixer/.php-cs-fixer.dist.php",
+    "style:cs-fix": "php-cs-fixer fix -v --config=.qa/php-cs-fixer/.php-cs-fixer.dist.php",
+    "style:phpcs" : "phpcs --colors -s --standard=.qa/phpcs/.phpcs.xml src Tests",
+    "style:phpcbf" : "phpcbf --colors -s --standard=.qa/phpcs/.phpcs.xml src Tests",
+    "style:psalm" : "psalm --show-info=true --config=.qa/psalm/psalm.xml",
+    "phpstan": "phpstan analyse -vvv --configuration=.qa/phpstan/phpstan.neon",
+    "deptrac": "deptrac --config-file=.qa/deptrac/deptrac.yaml -vvv",
+    "rector": "rector process --config .qa/rector/rector.php",
+    "rector-check": "rector process --dry-run --config .qa/rector/rector.php",
+    "coverage": "phpunit -c .qa/phpunit/phpunit.xml.dist --coverage-clover=.qa/coverage/coverage.xml --coverage-filter=src",
+    "coverage-html": "phpunit -c .qa/phpunit/phpunit.xml.dist --coverage-html .qa/coverage/html --coverage-filter=src",
+    "test:phpunit": "phpunit -c .qa/phpunit/phpunit.xml.dist",
+    "test:phpspec": "phpspec --config=.qa/phpspec/phpspec.yaml --format=progress run",
+    "test:phpspec-init": "phpspec --config=.qa/phpspec/phpspec.yaml describe",
+    "test:behat": "vendor/bin/behat --config=.qa/behat/behat.yaml",
+    "test:infection": "vendor/bin/infection --configuration=.qa/infection/infection.json5 --log-verbosity=all"
+  },
+  "config": {
+    "platform": {
+      "php": "8.3.16"
+    },
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
+  }
+}

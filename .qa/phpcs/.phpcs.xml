@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<ruleset name="Strenges Projekt Coding Style">
+
+    <description>Strenge Regeln basierend auf PSR-12 und zusätzlichen Prüfungen.</description>
+
+    <!-- PSR-12 Basisregelwerk -->
+    <rule ref="PSR12"/>
+
+    <!-- Zusätzliche Regeln für mehr Strenge -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration"/>
+    <rule ref="Generic.Formatting.SpaceAfterCast"/>
+
+    <!-- Optional: Keine leeren Catch-Blöcke -->
+    <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+
+    <!-- Exclude Rules -->
+    <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+
+    <!-- Vendor und generierte Dateien ausschließen -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>var/*</exclude-pattern>
+    <exclude-pattern>Tests/Helper/*</exclude-pattern>
+    <exclude-pattern>Tests/Spec/*</exclude-pattern>
+
+</ruleset>

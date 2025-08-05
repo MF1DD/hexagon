@@ -1,0 +1,55 @@
+deptrac:
+  # 👀 Hier sagt man Deptrac, welche Pfade gescannt werden sollen
+  paths:
+    - ./../../src
+
+  # 🔍 Diese Dateien werden ausgeschlossen (z.B. Tests)
+  exclude_files:
+    - '#.*test.*#'
+
+  # 🧅 Layers definieren die Schichten unserer Architektur
+  layers:
+    - name: Domain               # 💡 Reine Businesslogik
+      collectors:
+        - type: classLike
+          value: App\\Domain\\.*
+
+    - name: Application          # 🧠 Orchestriert Use Cases, ruft Domain auf
+      collectors:
+        - type: classLike
+          value: App\\Application\\.*
+
+    - name: Infrastructure       # 🧱 Datenbank, Dateisystem, externe Services
+      collectors:
+        - type: classLike
+          value: App\\Infrastructure\\.*
+
+    - name: UserInterface        # 🎭 Client, CLI, REST usw.
+      collectors:
+        - type: classLike
+          value: App\\UserInterface\\.*
+
+    - name: Bootstrap
+      collectors:
+          - type: classLike
+            value: App\\Bootstrap\\.*
+
+
+
+  # 🔒 Wer darf auf wen zugreifen?
+  ruleset:
+    Domain: [ ] # 🔒 Domain ist sakrosankt – niemand darf es kennen außer Application
+    Application: [ Domain ] # ✅ Application darf Domain nutzen
+    Infrastructure: [ Application, Domain ] # ✅ Implementiert Ports/Interfaces
+    UserInterface: [ Application, Bootstrap ] # ✅ UI darf nur mit Application reden!
+    Bootstrap: [ Application, Infrastructure, Domain ]
+
+
+
+
+#  | Layer              | Typische Klassen                                                                                | Kommentar                      |
+#  | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------ |
+#  | **Domain**         | `LuckyNumber`, `User`, `Entity`, `ValueObject`, `DomainEvent`, `LuckyNumberRepositoryInterface` | Keine externen Abhängigkeiten! |
+#  | **Application**    | `GenerateLuckyNumberHandler`, `CreateUserCommand`, `LoginService`                               | Koordiniert Use Cases          |
+#  | **Infrastructure** | `DoctrineLuckyNumberRepository`, `FileLogger`, `MailgunClient`                                  | Implementierung von Interfaces |
+#  | **UserInterface**  | `LuckyNumberController`, `ConsoleCommand`, `ApiController`                                      | Liefert Eingabe, zeigt Ausgabe |

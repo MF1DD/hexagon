@@ -1,0 +1,167 @@
+.DEFAULT_GOAL := help
+.SILENT:
+
+help:
+	@grep -hE '(^[a-zA-Z0-9 \./_-]+:.*?##.*$$)|(^##)|(^###)|(^####)' $(MAKEFILE_LIST) | \
+	awk 'BEGIN {FS = ":.*?## "}; \
+	/^## / {printf "\n \033[1;37m%s\033[0m\n", substr($$0, 4); next}; \
+	/^### / {printf " > \033[4;37m%s\033[0m\n", substr($$0, 5); next}; \
+	/^#### / {printf "\n\033[0;33m## %s\033[0m\033[2;37m\n", substr($$0, 6); next}; \
+	/^[a-zA-Z0-9\-\. ]+:.*?##/ { \
+		cmd = $$1; desc = $$2; \
+		n = split(cmd, parts, " "); \
+		formatted = parts[1]; \
+		vislen = length(parts[1]); \
+		for (i = 2; i <= n; i++) { \
+			alias = parts[i]; \
+			formatted = formatted " \033[0;36m(" alias ")\033[0m"; \
+			vislen += length(alias) + 3; \
+		} \
+		padding = 20 - vislen; if (padding < 1) padding = 1; \
+		printf " ─ \033[0;32m%s\033[0m%*s \033[0;39m%s\n", formatted, padding, "", desc; \
+	} END { print "" }'
+
+## Docker-Container
+setup: ## Install composer thinks
+	$(MAKE) -s .print m="####### Composer dump-autoload and install"
+	docker compose run --rm php composer dump-autoload
+	docker compose run --rm php composer install
+
+build rebuild: ## Build or rebuild the container
+	$(MAKE) -s .print m="####### Build images from Dockerfile"
+	docker compose build --no-cache --pull
+
+start up 1: ## Start container
+	$(MAKE) -s .print m="####### Start Docker"
+	docker compose up -d
+
+stop down 0: ## Stop container
+	$(MAKE) -s .print m="####### Run Stop Docker"
+	docker compose down
+
+console c: ## Open console
+	$(MAKE) -s .print m="####### Start Console"
+	docker compose run --rm php /bin/bash
+
+bin-console: ## Command with c=help
+	$(MAKE) -s .print m="####### Run bin/console $(c)"
+	docker compose run --rm php bin/console $(c)
+	echo "\n"
+
+## Tests
+
+all-tests: ## Run all Tests
+	$(MAKE) -s phpunit
+	$(MAKE) -s spec
+	$(MAKE) -s behat
+	$(MAKE) -s infection
+
+phpunit: ## Run phpunit Tests
+	$(MAKE) .print m="####### Run PHPUnit"
+	docker compose run --rm php composer test:phpunit
+
+coverage: ## Run phpunit Coverage
+	$(MAKE) -s .print m="####### Check Coverage"
+	docker compose run --rm php composer coverage
+
+coverage-html: ## Run phpunit Coverage wit HTML output
+	$(MAKE) -s .print m="####### Run Check Coverage HTML"
+	docker compose run --rm php composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
+
+infection: ## Run mutationen
+	$(MAKE) .print m="####### Run Infection"
+	docker compose run --rm php composer test:infection -- $(arg)
+
+.PHONY: spec
+spec: ## Run Spec Tests (Behaviour) | n='namespace'
+	$(MAKE) -s .print m="####### Run Spec"
+	docker compose run --rm php composer test:phpspec -- $${n}
+
+behat: ## Run all behat Tests
+	$(MAKE) -s .print m="####### Run Behat"
+	docker compose run --rm php composer test:behat
+
+spec-init: ## Run Spec init Tests (Behaviour)
+	$(MAKE) -s .print m="####### Run Spec Init"
+	docker compose run --rm php composer test:phpspec-init
+
+## Code - Style
+### Check
+all-style-checks asc: ## Run all Style checks
+	$(MAKE) -s cs-check
+	$(MAKE) -s phpcs-check
+	$(MAKE) -s rector-check
+	$(MAKE) -s phpstan
+	$(MAKE) -s phan
+	$(MAKE) -s deptrac
+
+cs-check: ## Run CS Fixer
+	$(MAKE) .print m="####### Run CS-Check"
+	docker compose run --rm php composer style:cs
+
+phpcs-check: ## Code style check
+	$(MAKE) .print m="####### Run PHP-CS"
+	docker compose run --rm php composer style:phpcs
+
+rector-check: ## Run Rector
+	$(MAKE) -s .print m="####### Run Rector"
+	docker compose run --rm php composer rector-check
+
+psalm: ## Run psalm
+	$(MAKE) .print m="####### Run Psalm"
+	docker compose run --rm php composer style:psalm
+
+phpstan: ## Run PHPstan
+	$(MAKE) -s .print m="####### Run PHPStan"
+	docker compose run --rm php composer phpstan
+
+
+### Fix
+all-style-fixes asf: ## Run all Style fixes
+	$(MAKE) -s cs-fix
+	$(MAKE) -s phpcs-fix
+	$(MAKE) -s rector
+
+cs-fix: ## Run CS Fixer
+	$(MAKE) .print m="####### Run CS-Fixer"
+	docker compose run --rm php composer style:cs-fix
+
+phpcs-fix: ## Code style fix
+	$(MAKE) .print m="####### Run PHP-CS Fixer"
+	docker compose run --rm php composer style:phpcbf
+
+rector: ## Run Rector
+	$(MAKE) -s .print m="####### Run Rector"
+	docker compose run --rm php composer rector
+
+
+
+
+
+## Architekture
+deptrac: ## Check Hexagonal architecture
+	$(MAKE) .print m="####### Run Deptrac"
+	docker compose run --rm php composer deptrac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.print:
+	printf "\033[33m\n${m}\033[0m\n"
