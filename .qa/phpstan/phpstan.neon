@@ -1,0 +1,27 @@
+services:
+  - class: Utils\PHPStan\MissingTestFileRule
+    tags: [phpstan.rules.rule]
+    arguments:
+      pathMap:
+        - sourceDir: /app/src
+          testDir: /app/Tests/Unit
+        - sourceDir: /app/.qa/phpstan/src
+          testDir: /app/.qa/phpstan/tests
+
+  - class: Utils\PHPStan\InterfaceNamespaceRule
+    tags: [phpstan.rules.rule]
+
+parameters:
+    level: max
+    paths:
+        - ../../.qa
+        - ../../src
+        - ../../Tests
+        - ../../public
+    ignoreErrors:
+        - identifier: method.nonObject
+          path: ../../Tests/Spec
+    excludePaths:
+        - tests
+
+    customRulesetUsed: true

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="2"
+        resolveFromConfigFile="true"
+        findUnusedCode="true"
+        findUnusedBaselineEntry="true"
+        reportUnusedSuppressions="true"
+>
+    <projectFiles>
+        <file name="/app/public/index.php"  />
+        <file name="/app/bin/console"  />
+        <directory name="/app/.qa" />
+        <directory name="/app/src" />
+        <directory name="/app/Tests" />
+    </projectFiles>
+
+    <forbiddenFunctions>
+        <function name="var_dump" />
+        <function name="dd" />
+    </forbiddenFunctions>
+
+    <issueHandlers>
+        <MissingReturnType severity="error"/>
+        <MissingParamType severity="error"/>
+        <MissingPropertyType severity="error"/>
+        <PossiblyNullReference severity="error"/>
+        <MixedAssignment severity="error"/>
+        <MixedReturnStatement severity="error"/>
+        <MixedArgument severity="error"/>
+
+        <MissingConstructor>
+            <errorLevel type="suppress">
+                <directory name="/app/Tests/Spec" />
+            </errorLevel>
+        </MissingConstructor>
+
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="/app/Tests/Spec" />
+                <directory name="/app/Tests/Unit" />
+                <directory name="/app/Tests/Feature" />
+                <directory name="/app/Tests/Helper" />
+                <directory name="/app/Tests/Behat" />
+                <directory name="/app/.qa" />
+            </errorLevel>
+        </UnusedClass>
+
+        <InvalidMethodCall>
+            <errorLevel type="suppress">
+                <directory name="/app/Tests/Spec" />
+            </errorLevel>
+        </InvalidMethodCall>
+
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="/app/Tests/Behat" />
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+
+    </issueHandlers>
+
+</psalm>
+<!-- https://psalm.dev/docs/running_psalm/configuration/-->

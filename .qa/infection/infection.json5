@@ -1,0 +1,30 @@
+{
+    // Maximale Zeit in Sekunden, die Infection für das Testen einer Mutation wartet
+    "timeout": 10,
+
+    "source": {
+        // Die Verzeichnisse, in denen Infection nach produktivem Code sucht
+        "directories": [
+            ".qa",
+            "src",
+        ],
+        "excludes": [
+            "src/App/UserInterface/CLI/PHPUnit",
+            ".qa/phpstan"
+        ]
+    },
+
+    "phpUnit": {
+        // Pfad zu deinem PHPUnit Binary
+        "customPath": "/app/vendor/bin/phpunit",
+
+        // Verzeichnis, in dem sich deine phpunit.xml.dist befindet
+        "configDir": "/app/.qa/phpunit"
+    },
+
+    "logs": {
+        "text": "logs/infection.log",
+        "summary": "logs/infection-summary.log",
+        "perMutator": "logs/per-mutator.log"
+    }
+}

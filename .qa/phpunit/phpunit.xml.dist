@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../../vendor/autoload.php"
+         colors="true"
+         executionOrder="random"
+         resolveDependencies="true"
+
+         stopOnFailure="false"
+         stopOnError="false"
+         stopOnWarning="false"
+         stopOnRisky="false"
+         stopOnDeprecation="false"
+         stopOnNotice="false"
+         stopOnSkipped="false"
+         stopOnIncomplete="false"
+
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnDeprecation="true"
+         failOnPhpunitDeprecation="true"
+         failOnNotice="true"
+         failOnSkipped="true"
+         failOnIncomplete="true"
+
+         displayDetailsOnAllIssues="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnPhpunitDeprecations="true"
+        >
+    <testsuites>
+        <testsuite name="PHPUnit Tests">
+            <directory>../../Tests/Unit</directory>
+            <exclude>../../Tests/Unit/Fixtures</exclude>
+        </testsuite>
+        <testsuite name="Feature Tests">
+            <directory>../../Tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Behat Tests">
+            <directory>../../Tests/Behat</directory>
+        </testsuite>
+        <testsuite name="Spec Tests">
+            <directory>../../Tests/Spec</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">../../src/</directory>
+        </include>
+    </source>
+</phpunit>

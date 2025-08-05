@@ -1,0 +1,15 @@
+default:
+  suites:
+    default:
+      contexts:
+        - Tests\Behat\LuckyNumberContext
+
+
+
+      strict: true         # Richtig hier rein
+      stop_on_failure: true # Richtig hier rein
+      paths:
+        - ../../Tests/Behat/Features
+  formatters:
+    pretty: true
+    progress: true
