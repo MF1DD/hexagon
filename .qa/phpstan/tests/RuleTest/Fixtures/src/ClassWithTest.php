@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPStan\Fixtures\src;
+namespace Tests\PHPStan\RuleTest\Fixtures\src;
 
 final class ClassWithTest
 {

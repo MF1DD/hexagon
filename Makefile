@@ -1,6 +1,9 @@
 .DEFAULT_GOAL := help
 .SILENT:
 
+$(shell [ -f .env ] || cp ./.env.skeleton .env)
+$(shell [ -d ./var/logs/nginx ] || mkdir -p ./var/logs/nginx)
+
 help:
 	@grep -hE '(^[a-zA-Z0-9 \./_-]+:.*?##.*$$)|(^##)|(^###)|(^####)' $(MAKEFILE_LIST) | \
 	awk 'BEGIN {FS = ":.*?## "}; \
@@ -37,7 +40,7 @@ start up 1: ## Start container
 
 stop down 0: ## Stop container
 	$(MAKE) -s .print m="####### Run Stop Docker"
-	docker compose down
+	docker compose down --remove-orphans
 
 console c: ## Open console
 	$(MAKE) -s .print m="####### Start Console"
@@ -48,13 +51,16 @@ bin-console: ## Command with c=help
 	docker compose run --rm php bin/console $(c)
 	echo "\n"
 
+composer-install: ## Run composer install
+	docker compose run --rm php composer install
+
 ## Tests
 
 all-tests: ## Run all Tests
 	$(MAKE) -s phpunit
+	$(MAKE) -s infection
 	$(MAKE) -s spec
 	$(MAKE) -s behat
-	$(MAKE) -s infection
 
 phpunit: ## Run phpunit Tests
 	$(MAKE) .print m="####### Run PHPUnit"
@@ -62,11 +68,11 @@ phpunit: ## Run phpunit Tests
 
 coverage: ## Run phpunit Coverage
 	$(MAKE) -s .print m="####### Check Coverage"
-	docker compose run --rm php composer coverage
+	docker compose run --rm -e XDEBUG_MODE=coverage php composer coverage
 
 coverage-html: ## Run phpunit Coverage wit HTML output
 	$(MAKE) -s .print m="####### Run Check Coverage HTML"
-	docker compose run --rm php composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
+	docker compose run --rm -e XDEBUG_MODE=coverage php composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
 
 infection: ## Run mutationen
 	$(MAKE) .print m="####### Run Infection"
@@ -135,30 +141,20 @@ rector: ## Run Rector
 	docker compose run --rm php composer rector
 
 
-
-
-
 ## Architekture
 deptrac: ## Check Hexagonal architecture
 	$(MAKE) .print m="####### Run Deptrac"
 	docker compose run --rm php composer deptrac
 
 
+all-check: ## Run all comands (also with fix) in order. If it runs at the end, you code is ready to commit
+	$(MAKE) -s all-style-fixes
 
+	$(MAKE) -s deptrac
+	$(MAKE) -s phpstan
+	$(MAKE) -s psalm
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	$(MAKE) -s all-tests
 
 
 

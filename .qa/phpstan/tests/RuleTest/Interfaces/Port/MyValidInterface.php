@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPStan\Interfaces\Port;
+namespace Tests\PHPStan\RuleTest\Interfaces\Port;
 
 interface MyValidInterface
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPStan;
+namespace Tests\PHPStan\RuleTest;
 
 use Override;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use Tests\PHPStan\RuleTest\Interfaces\InvalidInterface;
 use Utils\PHPStan\InterfaceNamespaceRule;
-use Tests\PHPStan\Interfaces\InvalidInterface;
 
 /**
  * @extends RuleTestCase<InterfaceNamespaceRule>

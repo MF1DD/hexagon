@@ -25,10 +25,14 @@ final readonly class MissingTestFileRule implements Rule
     public function __construct(
         private array $pathMap
     ) {
-        foreach ($pathMap as $mapping) {
-            if (!isset($mapping['sourceDir'], $mapping['testDir'])) {
-                throw new InvalidArgumentException('Each path map must have "sourceDir" and "testDir".');
-            }
+        $invalideMapping = array_filter(
+            $this->pathMap,
+            fn ($mapping): bool =>
+            !isset($mapping['sourceDir'], $mapping['testDir']),
+        );
+
+        if ($invalideMapping) {
+            throw new InvalidArgumentException('Each path map must have "sourceDir" and "testDir".');
         }
     }
 
@@ -92,33 +96,48 @@ final readonly class MissingTestFileRule implements Rule
 
     private function buildTestPathFromSourcePath(string $filePath): ?string
     {
+        /** @var null|string $result */
+        $result = array_reduce(
+            $this->pathMap,
+            function ($carry, array $mapping) use ($filePath) {
+                if ($carry !== null) {
+                    return $carry;
+                }
 
-        foreach ($this->pathMap as $mapping) {
-            $sourceDir = rtrim($mapping['sourceDir'], '/');
-            $testDir = rtrim($mapping['testDir'], '/');
+                $sourceDir = rtrim((string) $mapping['sourceDir'], '/');
+                $testDir   = rtrim((string) $mapping['testDir'], '/');
 
-            if (str_starts_with($filePath, $sourceDir)) {
-                $relativePath = substr($filePath, strlen($sourceDir));
-                $testPath = $testDir . $relativePath;
+                if (str_starts_with($filePath, $sourceDir)) {
+                    $relativePath = substr($filePath, strlen($sourceDir));
+                    $testPath     = $testDir . $relativePath;
+                    return str_replace('.php', 'Test.php', $testPath);
+                }
 
-                return str_replace('.php', 'Test.php', $testPath);
-            }
+                return null;
+            },
+            null
+        );
+
+        if (is_string($result)) {
+            return $result;
         }
 
         return null;
     }
 
-    private function hasNoTestNeededAttribute(\PhpParser\Node\Stmt\Class_ $node): bool
+    private function hasNoTestNeededAttribute(Class_ $node): bool
     {
 
-        foreach ($node->attrGroups as $group) {
-            foreach ($group->attrs as $attr) {
-                if ($attr->name->toString() === NoTestNeeded::class) {
-                    return true;
-                }
-            }
-        }
+        $foundNoTestNeeded = array_map(
+            fn ($group): bool =>
+                array_map(
+                    fn ($attr): bool =>
+                        $attr->name->toString() === NoTestNeeded::class,
+                    $group->attrs
+                ) !== [],
+            $node->attrGroups
+        );
 
-        return false;
+        return $foundNoTestNeeded !== [];
     }
 }

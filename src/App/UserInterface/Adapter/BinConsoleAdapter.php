@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\UserInterface\Adapter;
 
 use App\UserInterface\CLI\LuckyNumber\LuckyNumberCommand;
-use App\UserInterface\CLI\PHPUnit\CleanupTestsCommand;
-use App\UserInterface\CLI\PHPUnit\GenerateTestsCommand;
 use Exception;
 use Symfony\Component\Console\Application;
 
@@ -27,8 +25,6 @@ final class BinConsoleAdapter
 
         // Register CLI Commands
         $console->add(new LuckyNumberCommand());
-        $console->add(new GenerateTestsCommand());
-        $console->add(new CleanupTestsCommand());
 
         return $console;
     }

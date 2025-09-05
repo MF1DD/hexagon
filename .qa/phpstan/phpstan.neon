@@ -6,7 +6,7 @@ services:
         - sourceDir: /app/src
           testDir: /app/Tests/Unit
         - sourceDir: /app/.qa/phpstan/src
-          testDir: /app/.qa/phpstan/tests
+          testDir: /app/.qa/phpstan/tests/RuleTest
 
   - class: Utils\PHPStan\InterfaceNamespaceRule
     tags: [phpstan.rules.rule]
@@ -14,14 +14,14 @@ services:
 parameters:
     level: max
     paths:
-        - ../../.qa
-        - ../../src
-        - ../../Tests
-        - ../../public
+        - /app/.qa
+        - /app/src
+        - /app/Tests
+        - /app/public
     ignoreErrors:
         - identifier: method.nonObject
-          path: ../../Tests/Spec
+          path: /app/Tests/Spec
     excludePaths:
-        - tests
+        - /app/.qa/phpstan/tests
 
     customRulesetUsed: true
