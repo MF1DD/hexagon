@@ -22,7 +22,7 @@ final class LuckyNumberCommandTest extends TestCase
         $output = $tester->getDisplay();
 
         preg_match('/ist: (\d+)./', $output, $number);
-        if (LuckyNumberValue::LUCKY_MODULO % (int) $number[1] === 0) {
+        if ((int) $number[1] % LuckyNumberValue::LUCKY_MODULO === 0) {
             $this->assertMatchesRegularExpression(
                 '/🍀 Deine Zahl ist: \d+\. Es ist eine Glückszahl/',
                 $output

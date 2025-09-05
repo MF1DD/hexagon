@@ -29,24 +29,25 @@ final readonly class InterfaceNamespaceRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        $namespace = $scope->getNamespace() ?? '';
+        $namespace = $scope->getNamespace();
         $className = $node->name ? $node->name->toString() : '';
-        $interfaceFqcn = sprintf(
-            '%s\%s',
-            $namespace,
-            $className,
-        );
 
-        if (str_ends_with($namespace, 'Port') || str_ends_with($namespace, 'Ports')) {
+        if (str_ends_with((string) $namespace, 'Port') || str_ends_with((string) $namespace, 'Ports')) {
             return [];
         }
+
+        $interfaceFqcn = sprintf(
+            '%s\%s',
+            (string) $namespace,
+            $className,
+        );
 
         return [
             RuleErrorBuilder::message(
                 sprintf(
                     "❌ Interface \"%s\" is in the wrong namespace.\nIs expected: \"%s\Port\%s\" ",
                     $interfaceFqcn,
-                    $namespace,
+                    (string) $namespace,
                     $className,
                 )
             )->identifier('hexagon.interface')->build(),

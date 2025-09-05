@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPStan;
+namespace Tests\PHPStan\RuleTest;
 
 use Override;
-use Tests\PHPStan\Fixtures\src\MyClass;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Utils\PHPStan\Attribute\NoTestNeeded;
@@ -29,7 +28,7 @@ final class MissingTestFileRuleTest extends RuleTestCase
 
     public function testRuleDetectsMissingTest(): void
     {
-        $className = MyClass::class;
+        $className = 'MyClass';
         $testPath = __DIR__ . '/Fixtures/tests';
         $message = sprintf(
             'Test for class "%s" not found!',
@@ -46,7 +45,7 @@ final class MissingTestFileRuleTest extends RuleTestCase
             [
                 [
                     sprintf("%s\n%s\n%s", $message, $reasons[0], $reasons[1]),
-                    1, // Zeilennummer des Klassenbeginns
+                    1,
                 ],
             ]
         );
@@ -56,6 +55,14 @@ final class MissingTestFileRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/Fixtures/src/ClassWithTest.php'],
+            []
+        );
+    }
+
+    public function testRuleSkipsIfTestIsNotNeeded(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/Fixtures/src/NoTestNeededClass.php'],
             []
         );
     }

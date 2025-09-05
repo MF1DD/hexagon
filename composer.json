@@ -42,22 +42,22 @@
     }
   },
   "scripts": {
-    "style:cs": "php-cs-fixer check -v --config=.qa/php-cs-fixer/.php-cs-fixer.dist.php",
-    "style:cs-fix": "php-cs-fixer fix -v --config=.qa/php-cs-fixer/.php-cs-fixer.dist.php",
-    "style:phpcs" : "phpcs --colors -s --standard=.qa/phpcs/.phpcs.xml src Tests",
-    "style:phpcbf" : "phpcbf --colors -s --standard=.qa/phpcs/.phpcs.xml src Tests",
-    "style:psalm" : "psalm --show-info=true --config=.qa/psalm/psalm.xml",
-    "phpstan": "phpstan analyse -vvv --configuration=.qa/phpstan/phpstan.neon",
-    "deptrac": "deptrac --config-file=.qa/deptrac/deptrac.yaml -vvv",
-    "rector": "rector process --config .qa/rector/rector.php",
-    "rector-check": "rector process --dry-run --config .qa/rector/rector.php",
-    "coverage": "phpunit -c .qa/phpunit/phpunit.xml.dist --coverage-clover=.qa/coverage/coverage.xml --coverage-filter=src",
-    "coverage-html": "phpunit -c .qa/phpunit/phpunit.xml.dist --coverage-html .qa/coverage/html --coverage-filter=src",
-    "test:phpunit": "phpunit -c .qa/phpunit/phpunit.xml.dist",
+    "style:cs": "php-cs-fixer check -v --config=/app/.qa/php-cs-fixer/.php-cs-fixer.dist.php",
+    "style:cs-fix": "php-cs-fixer fix -v --config=/app/.qa/php-cs-fixer/.php-cs-fixer.dist.php",
+    "style:phpcs" : "phpcs --colors -s --standard=/app/.qa/phpcs/.phpcs.xml /app/src /app/Tests",
+    "style:phpcbf" : "phpcbf --colors -s --standard=/app/.qa/phpcs/.phpcs.xml /app/src /app/Tests",
+    "style:psalm" : "psalm --show-info=true --config=/app/.qa/psalm/psalm.xml",
+    "phpstan": "phpstan analyse -vvv --configuration=/app/.qa/phpstan/phpstan.neon",
+    "deptrac": "deptrac --config-file=/app/.qa/deptrac/deptrac.yaml -vvv",
+    "rector": "rector process --config=/app/.qa/rector/rector.php",
+    "rector-check": "rector process --dry-run --config=/app/.qa/rector/rector.php",
+    "coverage": "phpunit --configuration=/app/.qa/phpunit/phpunit.xml.dist --coverage-clover=/app/.qa/phpunit/coverage/coverage.xml --coverage-filter=src",
+    "coverage-html": "phpunit --configuration=/app/.qa/phpunit/phpunit.xml.dist --coverage-html=/app/.qa/phpunit/coverage/html --coverage-filter=src",
+    "test:phpunit": "phpunit --configuration=/app/.qa/phpunit/phpunit.xml.dist",
     "test:phpspec": "phpspec --config=.qa/phpspec/phpspec.yaml --format=progress run",
     "test:phpspec-init": "phpspec --config=.qa/phpspec/phpspec.yaml describe",
     "test:behat": "vendor/bin/behat --config=.qa/behat/behat.yaml",
-    "test:infection": "vendor/bin/infection --configuration=.qa/infection/infection.json5 --log-verbosity=all"
+    "test:infection": "vendor/bin/infection --configuration=/app/.qa/infection/infection.json5 --log-verbosity=all"
   },
   "config": {
     "platform": {

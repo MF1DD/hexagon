@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1754389563">
-  <project timestamp="1754389563" name="Clover Coverage">
+<coverage generated="1757076818">
+  <project timestamp="1757076818" name="Clover Coverage">
     <package name="App\Application\LuckyNumber\DTO">
       <file name="/app/src/App/Application/LuckyNumber/DTO/LuckyNumberOutput.php">
         <class name="App\Application\LuckyNumber\DTO\LuckyNumberOutput" namespace="App\Application\LuckyNumber\DTO">
@@ -40,15 +40,17 @@
     <package name="App\Bootstrap">
       <file name="/app/src/App/Bootstrap/LuckyNumberServiceFactory.php">
         <class name="App\Bootstrap\LuckyNumberServiceFactory" namespace="App\Bootstrap">
-          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="6" coveredelements="6"/>
+          <metrics complexity="3" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
         </class>
-        <line num="16" type="method" name="createGenerateLuckyNumberHandler" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="16" type="method" name="createGenerateLuckyNumberHandler" visibility="public" complexity="3" crap="3" count="4"/>
         <line num="20" type="stmt" count="4"/>
         <line num="21" type="stmt" count="4"/>
         <line num="22" type="stmt" count="4"/>
-        <line num="23" type="stmt" count="4"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="4"/>
         <line num="25" type="stmt" count="4"/>
-        <metrics loc="28" ncloc="28" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="6" coveredelements="6"/>
+        <line num="27" type="stmt" count="4"/>
+        <metrics loc="30" ncloc="30" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
       </file>
     </package>
     <package name="App\Domain\LuckyNumber\Entity">
@@ -156,18 +158,16 @@
     <package name="App\UserInterface\Adapter">
       <file name="/app/src/App/UserInterface/Adapter/BinConsoleAdapter.php">
         <class name="App\UserInterface\Adapter\BinConsoleAdapter" namespace="App\UserInterface\Adapter">
-          <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="5" elements="9" coveredelements="6"/>
+          <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="3" elements="7" coveredelements="4"/>
         </class>
-        <line num="18" type="method" name="run" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="20" type="stmt" count="0"/>
-        <line num="21" type="stmt" count="0"/>
-        <line num="24" type="method" name="createConsole" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="26" type="stmt" count="1"/>
+        <line num="16" type="method" name="run" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="18" type="stmt" count="0"/>
+        <line num="19" type="stmt" count="0"/>
+        <line num="22" type="method" name="createConsole" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
         <line num="29" type="stmt" count="1"/>
-        <line num="30" type="stmt" count="1"/>
-        <line num="31" type="stmt" count="1"/>
-        <line num="33" type="stmt" count="1"/>
-        <metrics loc="36" ncloc="32" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="5" elements="9" coveredelements="6"/>
+        <metrics loc="32" ncloc="28" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="3" elements="7" coveredelements="4"/>
       </file>
       <file name="/app/src/App/UserInterface/Adapter/SlimWebAdapter.php">
         <class name="App\UserInterface\Adapter\SlimWebAdapter" namespace="App\UserInterface\Adapter">
@@ -202,177 +202,6 @@
         <metrics loc="31" ncloc="31" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="11" coveredelements="11"/>
       </file>
     </package>
-    <package name="App\UserInterface\CLI\PHPUnit">
-      <file name="/app/src/App/UserInterface/CLI/PHPUnit/CleanupTestsCommand.php">
-        <class name="App\UserInterface\CLI\PHPUnit\CleanupTestsCommand" namespace="App\UserInterface\CLI\PHPUnit">
-          <metrics complexity="20" methods="7" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="53" coveredelements="0"/>
-        </class>
-        <line num="22" type="method" name="execute" visibility="protected" complexity="3" crap="12" count="0"/>
-        <line num="25" type="stmt" count="0"/>
-        <line num="27" type="stmt" count="0"/>
-        <line num="29" type="stmt" count="0"/>
-        <line num="30" type="stmt" count="0"/>
-        <line num="31" type="stmt" count="0"/>
-        <line num="34" type="stmt" count="0"/>
-        <line num="36" type="stmt" count="0"/>
-        <line num="37" type="stmt" count="0"/>
-        <line num="38" type="stmt" count="0"/>
-        <line num="41" type="stmt" count="0"/>
-        <line num="43" type="stmt" count="0"/>
-        <line num="51" type="method" name="findDanglingTestFiles" visibility="protected" complexity="7" crap="56" count="0"/>
-        <line num="53" type="stmt" count="0"/>
-        <line num="54" type="stmt" count="0"/>
-        <line num="55" type="stmt" count="0"/>
-        <line num="57" type="stmt" count="0"/>
-        <line num="59" type="stmt" count="0"/>
-        <line num="60" type="stmt" count="0"/>
-        <line num="61" type="stmt" count="0"/>
-        <line num="64" type="stmt" count="0"/>
-        <line num="65" type="stmt" count="0"/>
-        <line num="66" type="stmt" count="0"/>
-        <line num="67" type="stmt" count="0"/>
-        <line num="70" type="stmt" count="0"/>
-        <line num="71" type="stmt" count="0"/>
-        <line num="72" type="stmt" count="0"/>
-        <line num="75" type="stmt" count="0"/>
-        <line num="76" type="stmt" count="0"/>
-        <line num="77" type="stmt" count="0"/>
-        <line num="80" type="stmt" count="0"/>
-        <line num="81" type="stmt" count="0"/>
-        <line num="82" type="stmt" count="0"/>
-        <line num="86" type="stmt" count="0"/>
-        <line num="89" type="method" name="isPhpTestFile" visibility="private" complexity="2" crap="6" count="0"/>
-        <line num="91" type="stmt" count="0"/>
-        <line num="94" type="method" name="extractRelativeNamespace" visibility="private" complexity="2" crap="6" count="0"/>
-        <line num="96" type="stmt" count="0"/>
-        <line num="97" type="stmt" count="0"/>
-        <line num="99" type="stmt" count="0"/>
-        <line num="102" type="method" name="resolveSourcePath" visibility="private" complexity="1" crap="2" count="0"/>
-        <line num="104" type="stmt" count="0"/>
-        <line num="105" type="stmt" count="0"/>
-        <line num="106" type="stmt" count="0"/>
-        <line num="112" type="method" name="outputDanglingTests" visibility="private" complexity="2" crap="6" count="0"/>
-        <line num="114" type="stmt" count="0"/>
-        <line num="115" type="stmt" count="0"/>
-        <line num="116" type="stmt" count="0"/>
-        <line num="123" type="method" name="deleteDanglingTests" visibility="private" complexity="3" crap="12" count="0"/>
-        <line num="125" type="stmt" count="0"/>
-        <line num="126" type="stmt" count="0"/>
-        <line num="127" type="stmt" count="0"/>
-        <line num="129" type="stmt" count="0"/>
-        <metrics loc="134" ncloc="122" classes="1" methods="7" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="53" coveredelements="0"/>
-      </file>
-      <file name="/app/src/App/UserInterface/CLI/PHPUnit/GenerateTestsCommand.php">
-        <class name="App\UserInterface\CLI\PHPUnit\GenerateTestsCommand" namespace="App\UserInterface\CLI\PHPUnit">
-          <metrics complexity="29" methods="7" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="97" coveredstatements="4" elements="104" coveredelements="5"/>
-        </class>
-        <line num="23" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="1"/>
-        <line num="25" type="stmt" count="1"/>
-        <line num="26" type="stmt" count="1"/>
-        <line num="27" type="stmt" count="1"/>
-        <line num="28" type="stmt" count="1"/>
-        <line num="31" type="method" name="execute" visibility="protected" complexity="5" crap="30" count="0"/>
-        <line num="34" type="stmt" count="0"/>
-        <line num="35" type="stmt" count="0"/>
-        <line num="36" type="stmt" count="0"/>
-        <line num="37" type="stmt" count="0"/>
-        <line num="39" type="stmt" count="0"/>
-        <line num="40" type="stmt" count="0"/>
-        <line num="41" type="stmt" count="0"/>
-        <line num="44" type="stmt" count="0"/>
-        <line num="45" type="stmt" count="0"/>
-        <line num="46" type="stmt" count="0"/>
-        <line num="47" type="stmt" count="0"/>
-        <line num="50" type="stmt" count="0"/>
-        <line num="52" type="stmt" count="0"/>
-        <line num="53" type="stmt" count="0"/>
-        <line num="54" type="stmt" count="0"/>
-        <line num="55" type="stmt" count="0"/>
-        <line num="58" type="stmt" count="0"/>
-        <line num="59" type="stmt" count="0"/>
-        <line num="60" type="stmt" count="0"/>
-        <line num="61" type="stmt" count="0"/>
-        <line num="64" type="stmt" count="0"/>
-        <line num="66" type="stmt" count="0"/>
-        <line num="68" type="stmt" count="0"/>
-        <line num="71" type="method" name="findCandidates" visibility="private" complexity="8" crap="72" count="0"/>
-        <line num="73" type="stmt" count="0"/>
-        <line num="74" type="stmt" count="0"/>
-        <line num="75" type="stmt" count="0"/>
-        <line num="77" type="stmt" count="0"/>
-        <line num="79" type="stmt" count="0"/>
-        <line num="80" type="stmt" count="0"/>
-        <line num="81" type="stmt" count="0"/>
-        <line num="84" type="stmt" count="0"/>
-        <line num="85" type="stmt" count="0"/>
-        <line num="86" type="stmt" count="0"/>
-        <line num="89" type="stmt" count="0"/>
-        <line num="90" type="stmt" count="0"/>
-        <line num="93" type="stmt" count="0"/>
-        <line num="94" type="stmt" count="0"/>
-        <line num="95" type="stmt" count="0"/>
-        <line num="96" type="stmt" count="0"/>
-        <line num="98" type="stmt" count="0"/>
-        <line num="99" type="stmt" count="0"/>
-        <line num="102" type="stmt" count="0"/>
-        <line num="103" type="stmt" count="0"/>
-        <line num="104" type="stmt" count="0"/>
-        <line num="105" type="stmt" count="0"/>
-        <line num="106" type="stmt" count="0"/>
-        <line num="107" type="stmt" count="0"/>
-        <line num="110" type="stmt" count="0"/>
-        <line num="113" type="method" name="displayCandidates" visibility="private" complexity="2" crap="6" count="0"/>
-        <line num="115" type="stmt" count="0"/>
-        <line num="116" type="stmt" count="0"/>
-        <line num="117" type="stmt" count="0"/>
-        <line num="121" type="method" name="askForSelection" visibility="private" complexity="6" crap="42" count="0"/>
-        <line num="123" type="stmt" count="0"/>
-        <line num="125" type="stmt" count="0"/>
-        <line num="126" type="stmt" count="0"/>
-        <line num="129" type="stmt" count="0"/>
-        <line num="130" type="stmt" count="0"/>
-        <line num="133" type="stmt" count="0"/>
-        <line num="134" type="stmt" count="0"/>
-        <line num="136" type="stmt" count="0"/>
-        <line num="137" type="stmt" count="0"/>
-        <line num="138" type="stmt" count="0"/>
-        <line num="139" type="stmt" count="0"/>
-        <line num="142" type="stmt" count="0"/>
-        <line num="143" type="stmt" count="0"/>
-        <line num="144" type="stmt" count="0"/>
-        <line num="145" type="stmt" count="0"/>
-        <line num="148" type="stmt" count="0"/>
-        <line num="151" type="stmt" count="0"/>
-        <line num="154" type="method" name="generateTests" visibility="private" complexity="4" crap="20" count="0"/>
-        <line num="156" type="stmt" count="0"/>
-        <line num="157" type="stmt" count="0"/>
-        <line num="159" type="stmt" count="0"/>
-        <line num="160" type="stmt" count="0"/>
-        <line num="161" type="stmt" count="0"/>
-        <line num="162" type="stmt" count="0"/>
-        <line num="163" type="stmt" count="0"/>
-        <line num="166" type="stmt" count="0"/>
-        <line num="167" type="stmt" count="0"/>
-        <line num="168" type="stmt" count="0"/>
-        <line num="171" type="stmt" count="0"/>
-        <line num="172" type="stmt" count="0"/>
-        <line num="173" type="stmt" count="0"/>
-        <line num="174" type="stmt" count="0"/>
-        <line num="175" type="stmt" count="0"/>
-        <line num="177" type="stmt" count="0"/>
-        <line num="179" type="stmt" count="0"/>
-        <line num="180" type="stmt" count="0"/>
-        <line num="181" type="stmt" count="0"/>
-        <line num="185" type="method" name="writeLogIfNeeded" visibility="private" complexity="3" crap="12" count="0"/>
-        <line num="187" type="stmt" count="0"/>
-        <line num="188" type="stmt" count="0"/>
-        <line num="192" type="stmt" count="0"/>
-        <line num="193" type="stmt" count="0"/>
-        <line num="194" type="stmt" count="0"/>
-        <line num="195" type="stmt" count="0"/>
-        <metrics loc="198" ncloc="198" classes="1" methods="7" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="97" coveredstatements="4" elements="104" coveredelements="5"/>
-      </file>
-    </package>
     <package name="App\UserInterface\Web\Adapter">
       <file name="/app/src/App/UserInterface/Web/Adapter/ResponseAdapter.php">
         <class name="App\UserInterface\Web\Adapter\ResponseAdapter" namespace="App\UserInterface\Web\Adapter">
@@ -400,6 +229,6 @@
         <metrics loc="23" ncloc="23" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="6" coveredelements="6"/>
       </file>
     </package>
-    <metrics files="21" loc="813" ncloc="780" classes="17" methods="41" coveredmethods="26" conditionals="0" coveredconditionals="0" statements="213" coveredstatements="70" elements="254" coveredelements="96"/>
+    <metrics files="19" loc="479" ncloc="458" classes="15" methods="27" coveredmethods="25" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="66" elements="97" coveredelements="91"/>
   </project>
 </coverage>
