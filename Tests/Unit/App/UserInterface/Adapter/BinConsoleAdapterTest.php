@@ -18,7 +18,7 @@ final class BinConsoleAdapterTest extends TestCase
         $this->assertInstanceOf(Application::class, $console);
 
         $commandNames = array_map(
-            static fn ($cmd): ?string => $cmd->getName(),
+            static fn (\Symfony\Component\Console\Command\Command $cmd): ?string => $cmd->getName(),
             $console->all()
         );
 

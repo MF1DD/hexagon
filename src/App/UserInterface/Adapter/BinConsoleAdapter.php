@@ -24,7 +24,7 @@ final class BinConsoleAdapter
         $console = new Application();
 
         // Register CLI Commands
-        $console->add(new LuckyNumberCommand());
+        $console->addCommands([new LuckyNumberCommand()]);
 
         return $console;
     }

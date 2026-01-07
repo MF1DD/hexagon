@@ -14,7 +14,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_83, // Hebt deinen Code auf aktuellen PHP 8.3 Standard
+        LevelSetList::UP_TO_PHP_84, // Hebt deinen Code auf aktuellen PHP 8.4 Standard
         SetList::TYPE_DECLARATION,  // Fügt fehlende Typehints & Return-Types hinzu
         SetList::CODING_STYLE,      // Vereinheitlicht Code-Stil
         SetList::EARLY_RETURN,      // Nutzt `early return`-Patterns

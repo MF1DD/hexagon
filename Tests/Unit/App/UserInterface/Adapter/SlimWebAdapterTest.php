@@ -17,7 +17,7 @@ final class SlimWebAdapterTest extends TestCase
     {
         $app = SlimWebAdapter::createApp();
 
-        $request = (new ServerRequestFactory())
+        $request = new ServerRequestFactory()
             ->createServerRequest('GET', '/lucky-number');
 
         $response = $app->handle($request);

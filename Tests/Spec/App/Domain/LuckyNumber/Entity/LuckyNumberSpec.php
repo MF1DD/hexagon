@@ -13,6 +13,14 @@ use PhpSpec\ObjectBehavior;
  */
 final class LuckyNumberSpec extends ObjectBehavior
 {
+    public function let(): void
+    {
+        $this->beConstructedWith(
+            new \App\Domain\LuckyNumber\ValueObject\LuckyNumberId('id'),
+            new \App\Domain\LuckyNumber\ValueObject\LuckyNumberValue(1)
+        );
+    }
+
     public function it_is_initializable(): void
     {
         $this->shouldHaveType(LuckyNumber::class);

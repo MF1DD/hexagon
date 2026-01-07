@@ -2,7 +2,7 @@
   "name": "strenges/projekt",
   "version": "20250712",
   "require": {
-    "php": "^8.3",
+    "php": "^8.4",
     "slim/slim": "^4.14",
     "symfony/console": "^7.3",
     "slim/psr7": "^1.7"
@@ -13,7 +13,7 @@
     "friendsofphp/php-cs-fixer": "v3.84.0",
     "phpstan/phpstan": "^2.1.18",
     "rector/rector": "^2.1.1",
-    "phpspec/phpspec": "^7.6.0",
+    "phpspec/phpspec": "^8.1",
     "behat/behat": "^v3.23.0",
     "infection/infection": "^0.30.3",
     "squizlabs/php_codesniffer": "^3.13.2",
@@ -44,9 +44,9 @@
   "scripts": {
     "style:cs": "php-cs-fixer check -v --config=/app/.qa/php-cs-fixer/.php-cs-fixer.dist.php",
     "style:cs-fix": "php-cs-fixer fix -v --config=/app/.qa/php-cs-fixer/.php-cs-fixer.dist.php",
-    "style:phpcs" : "phpcs --colors -s --standard=/app/.qa/phpcs/.phpcs.xml /app/src /app/Tests",
-    "style:phpcbf" : "phpcbf --colors -s --standard=/app/.qa/phpcs/.phpcs.xml /app/src /app/Tests",
-    "style:psalm" : "psalm --show-info=true --config=/app/.qa/psalm/psalm.xml",
+    "style:phpcs": "phpcs --colors -s --standard=/app/.qa/phpcs/.phpcs.xml /app/src /app/Tests",
+    "style:phpcbf": "phpcbf --colors -s --standard=/app/.qa/phpcs/.phpcs.xml /app/src /app/Tests",
+    "style:psalm": "psalm --show-info=true --config=/app/.qa/psalm/psalm.xml",
     "phpstan": "phpstan analyse -vvv --configuration=/app/.qa/phpstan/phpstan.neon",
     "deptrac": "deptrac --config-file=/app/.qa/deptrac/deptrac.yaml -vvv",
     "rector": "rector process --config=/app/.qa/rector/rector.php",
@@ -61,7 +61,7 @@
   },
   "config": {
     "platform": {
-      "php": "8.3.16"
+      "php": "8.4.16"
     },
     "allow-plugins": {
       "infection/extension-installer": true

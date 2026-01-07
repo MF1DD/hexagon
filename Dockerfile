@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # User und Gruppe erstellen
 RUN addgroup --gid 1000 appgroup \

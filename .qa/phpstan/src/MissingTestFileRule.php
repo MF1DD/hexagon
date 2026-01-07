@@ -27,7 +27,7 @@ final readonly class MissingTestFileRule implements Rule
     ) {
         $invalideMapping = array_filter(
             $this->pathMap,
-            fn ($mapping): bool =>
+            fn (array $mapping): bool =>
             !isset($mapping['sourceDir'], $mapping['testDir']),
         );
 
@@ -129,9 +129,9 @@ final readonly class MissingTestFileRule implements Rule
     {
 
         $foundNoTestNeeded = array_map(
-            fn ($group): bool =>
+            fn (\PhpParser\Node\AttributeGroup $group): bool =>
                 array_map(
-                    fn ($attr): bool =>
+                    fn (\PhpParser\Node\Attribute $attr): bool =>
                         $attr->name->toString() === NoTestNeeded::class,
                     $group->attrs
                 ) !== [],

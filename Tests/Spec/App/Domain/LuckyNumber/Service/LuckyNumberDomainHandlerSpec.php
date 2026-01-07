@@ -13,6 +13,11 @@ use PhpSpec\ObjectBehavior;
  */
 final class LuckyNumberDomainHandlerSpec extends ObjectBehavior
 {
+    public function let(\App\Domain\Shared\Port\IdGeneratorInterface $idGenerator, \App\Domain\LuckyNumber\Port\LuckyNumberGeneratorInterface $luckyNumberGenerator): void
+    {
+        $this->beConstructedWith($idGenerator, $luckyNumberGenerator);
+    }
+
     public function it_is_initializable(): void
     {
         $this->shouldHaveType(LuckyNumberDomainHandler::class);
