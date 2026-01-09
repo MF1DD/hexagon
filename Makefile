@@ -68,11 +68,11 @@ phpunit: ## Run phpunit Tests
 
 phpunit-unit: ## Run Unit Tests only
 	$(MAKE) .print m="####### Run PHPUnit Unit Tests"
-	docker compose run --rm php-app vendor/bin/phpunit --testsuite="PHPUnit Tests"
+	docker compose run --rm php-app composer test:phpunit-unit
 
 phpunit-feature: ## Run Feature Tests (requires running stack)
 	$(MAKE) .print m="####### Run PHPUnit Feature Tests"
-	docker compose exec php-app vendor/bin/phpunit --testsuite="Feature Tests"
+	docker compose exec php-app composer test:phpunit-feature
 
 coverage: ## Run phpunit Coverage
 	$(MAKE) -s .print m="####### Check Coverage"

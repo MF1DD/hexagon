@@ -54,6 +54,8 @@
     "coverage": "phpunit --configuration=/app/.qa/phpunit/phpunit.xml.dist --coverage-clover=/app/.qa/phpunit/coverage/coverage.xml --coverage-filter=src",
     "coverage-html": "phpunit --configuration=/app/.qa/phpunit/phpunit.xml.dist --coverage-html=/app/.qa/phpunit/coverage/html --coverage-filter=src",
     "test:phpunit": "phpunit --configuration=/app/.qa/phpunit/phpunit.xml.dist",
+    "test:phpunit-unit": "vendor/bin/phpunit --testsuite=\"PHPUnit Tests\"",
+    "test:phpunit-feature": "vendor/bin/phpunit --testsuite=\"Feature Tests\"",
     "test:phpspec": "phpspec --config=.qa/phpspec/phpspec.yaml --format=progress run",
     "test:phpspec-init": "phpspec --config=.qa/phpspec/phpspec.yaml describe",
     "test:behat": "vendor/bin/behat --config=.qa/behat/behat.yaml",
