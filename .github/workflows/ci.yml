@@ -12,8 +12,8 @@ jobs:
     name: Setup Environment
     runs-on: ubuntu-latest
     env:
-      UID: 1000
-      GID: 1000
+      UID: 0
+      GID: 0
     steps:
       - uses: actions/checkout@v4
       
