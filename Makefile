@@ -64,7 +64,7 @@ all-tests: ## Run all Tests
 
 phpunit: ## Run phpunit Tests
 	$(MAKE) .print m="####### Run PHPUnit"
-	docker compose run --rm php-app composer test:phpunit
+	docker compose exec php-app composer test:phpunit
 
 coverage: ## Run phpunit Coverage
 	$(MAKE) -s .print m="####### Check Coverage"
