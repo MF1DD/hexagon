@@ -188,6 +188,12 @@ jobs:
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make start
 
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for nginx to be ready..."
+          timeout 60 bash -c 'until curl -f http://localhost:8080/lucky-number; do sleep 2; done'
+          echo "Services are ready!"
+
       - name: PHPUnit Feature Tests
         run: make phpunit-feature
 
