@@ -1,0 +1,5 @@
+services:
+  php:
+    # Override user directive for CI - run as container default user (root)
+    # This prevents permission issues when creating vendor directory
+    user: null
