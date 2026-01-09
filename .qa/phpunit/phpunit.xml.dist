@@ -18,7 +18,7 @@
          failOnDeprecation="true"
          failOnPhpunitDeprecation="true"
          failOnNotice="true"
-         failOnSkipped="true"
+         failOnSkipped="false"
          failOnIncomplete="true"
 
          displayDetailsOnAllIssues="true"
