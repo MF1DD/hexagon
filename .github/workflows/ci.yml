@@ -7,17 +7,44 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  # Fast checks and architecture
-  quality:
-    name: Code Quality & Architecture
+  # Build Docker image and install dependencies once
+  setup:
+    name: Setup Environment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build and Setup
-        run: |
-          docker compose build --no-cache
-          make setup
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker Image
+        run: docker compose build
+      
+      - name: Install Dependencies
+        run: make setup
+      
+      - name: Cache Vendor Directory
+        uses: actions/cache/save@v3
+        with:
+          path: vendor
+          key: vendor-${{ hashFiles('composer.lock') }}
+
+  # Fast checks and architecture
+  quality:
+    name: Code Quality & Architecture
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Restore Vendor Cache
+        uses: actions/cache/restore@v3
+        with:
+          path: vendor
+          key: vendor-${{ hashFiles('composer.lock') }}
+      
+      - name: Build Docker Image
+        run: docker compose build
 
       - name: Code Style (CS Fixer)
         run: make cs-check
@@ -35,13 +62,18 @@ jobs:
   static-analysis:
     name: Static Analysis
     runs-on: ubuntu-latest
+    needs: setup
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build and Setup
-        run: |
-          docker compose build --no-cache
-          make setup
+      - name: Restore Vendor Cache
+        uses: actions/cache/restore@v3
+        with:
+          path: vendor
+          key: vendor-${{ hashFiles('composer.lock') }}
+      
+      - name: Build Docker Image
+        run: docker compose build
 
       - name: PHPStan
         run: make phpstan
@@ -53,13 +85,18 @@ jobs:
   tests:
     name: Tests (Unit & Behavior)
     runs-on: ubuntu-latest
+    needs: setup
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build and Setup
-        run: |
-          docker compose build --no-cache
-          make setup
+      - name: Restore Vendor Cache
+        uses: actions/cache/restore@v3
+        with:
+          path: vendor
+          key: vendor-${{ hashFiles('composer.lock') }}
+      
+      - name: Build Docker Image
+        run: docker compose build
 
       - name: PHPUnit
         run: make phpunit
@@ -74,13 +111,18 @@ jobs:
   mutation:
     name: Mutation Testing
     runs-on: ubuntu-latest
+    needs: setup
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build and Setup
-        run: |
-          docker compose build --no-cache
-          make setup
+      - name: Restore Vendor Cache
+        uses: actions/cache/restore@v3
+        with:
+          path: vendor
+          key: vendor-${{ hashFiles('composer.lock') }}
+      
+      - name: Build Docker Image
+        run: docker compose build
 
       - name: Infection
         run: make infection
