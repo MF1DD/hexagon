@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  # Fast checks and architecture
+  quality:
+    name: Code Quality & Architecture
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build and Setup
+        run: |
+          docker compose build --no-cache
+          make setup
+
+      - name: Code Style (CS Fixer)
+        run: make cs-check
+
+      - name: Code Style (PHPCS)
+        run: make phpcs-check
+
+      - name: Rector Analysis
+        run: make rector-check
+
+      - name: Architecture (Deptrac)
+        run: make deptrac
+
+  # Deep static analysis
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build and Setup
+        run: |
+          docker compose build --no-cache
+          make setup
+
+      - name: PHPStan
+        run: make phpstan
+
+      - name: Psalm
+        run: make psalm
+
+  # Functional and Unit tests
+  tests:
+    name: Tests (Unit & Behavior)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build and Setup
+        run: |
+          docker compose build --no-cache
+          make setup
+
+      - name: PHPUnit
+        run: make phpunit
+
+      - name: PHPSpec
+        run: make spec
+
+      - name: Behat
+        run: make behat
+
+  # Mutation testing (usually slow)
+  mutation:
+    name: Mutation Testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build and Setup
+        run: |
+          docker compose build --no-cache
+          make setup
+
+      - name: Infection
+        run: make infection
