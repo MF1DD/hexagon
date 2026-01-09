@@ -1,0 +1,9 @@
+services:
+  php-app:
+    # Muss exakt so heißen wie in deiner Haupt-docker-compose.yml
+    image: ${IMAGE_NAME}
+    user: "${UID}:${GID}"
+    volumes:
+      - .:/var/www/html # Mountet den aktuellen CI-Code in den Container
+    environment:
+      - XDEBUG_MODE=off # In der CI meistens schneller ohne Xdebug

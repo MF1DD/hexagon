@@ -27,8 +27,8 @@ help:
 ## Docker-Container
 setup: ## Install composer thinks
 	$(MAKE) -s .print m="####### Composer dump-autoload and install"
-	docker compose run --rm php composer dump-autoload
-	docker compose run --rm php composer install
+	docker compose run --rm php-app composer dump-autoload
+	docker compose run --rm php-app composer install
 
 build rebuild: ## Build or rebuild the container
 	$(MAKE) -s .print m="####### Build images from Dockerfile"
@@ -44,15 +44,15 @@ stop down 0: ## Stop container
 
 console c: ## Open console
 	$(MAKE) -s .print m="####### Start Console"
-	docker compose run --rm php /bin/bash
+	docker compose run --rm php-app /bin/bash
 
 bin-console: ## Command with c=help
 	$(MAKE) -s .print m="####### Run bin/console $(c)"
-	docker compose run --rm php bin/console $(c)
+	docker compose run --rm php-app bin/console $(c)
 	echo "\n"
 
 composer-install: ## Run composer install
-	docker compose run --rm php composer install
+	docker compose run --rm php-app composer install
 
 ## Tests
 
@@ -64,32 +64,32 @@ all-tests: ## Run all Tests
 
 phpunit: ## Run phpunit Tests
 	$(MAKE) .print m="####### Run PHPUnit"
-	docker compose run --rm php composer test:phpunit
+	docker compose run --rm php-app composer test:phpunit
 
 coverage: ## Run phpunit Coverage
 	$(MAKE) -s .print m="####### Check Coverage"
-	docker compose run --rm -e XDEBUG_MODE=coverage php composer coverage
+	docker compose run --rm -e XDEBUG_MODE=coverage php-app composer coverage
 
 coverage-html: ## Run phpunit Coverage wit HTML output
 	$(MAKE) -s .print m="####### Run Check Coverage HTML"
-	docker compose run --rm -e XDEBUG_MODE=coverage php composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
+	docker compose run --rm -e XDEBUG_MODE=coverage php-app composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
 
 infection: ## Run mutationen
 	$(MAKE) .print m="####### Run Infection"
-	docker compose run --rm php composer test:infection -- $(arg)
+	docker compose run --rm php-app composer test:infection -- $(arg)
 
 .PHONY: spec
 spec: ## Run Spec Tests (Behaviour) | n='namespace'
 	$(MAKE) -s .print m="####### Run Spec"
-	docker compose run --rm php composer test:phpspec -- $${n}
+	docker compose run --rm php-app composer test:phpspec -- $${n}
 
 behat: ## Run all behat Tests
 	$(MAKE) -s .print m="####### Run Behat"
-	docker compose run --rm php composer test:behat
+	docker compose run --rm php-app composer test:behat
 
 spec-init: ## Run Spec init Tests (Behaviour)
 	$(MAKE) -s .print m="####### Run Spec Init"
-	docker compose run --rm php composer test:phpspec-init
+	docker compose run --rm php-app composer test:phpspec-init
 
 ## Code - Style
 ### Check
@@ -103,23 +103,23 @@ all-style-checks asc: ## Run all Style checks
 
 cs-check: ## Run CS Fixer
 	$(MAKE) .print m="####### Run CS-Check"
-	docker compose run --rm php composer style:cs
+	docker compose run --rm php-app composer style:cs
 
 phpcs-check: ## Code style check
 	$(MAKE) .print m="####### Run PHP-CS"
-	docker compose run --rm php composer style:phpcs
+	docker compose run --rm php-app composer style:phpcs
 
 rector-check: ## Run Rector
 	$(MAKE) -s .print m="####### Run Rector"
-	docker compose run --rm php composer rector-check
+	docker compose run --rm php-app composer rector-check
 
 psalm: ## Run psalm
 	$(MAKE) .print m="####### Run Psalm"
-	docker compose run --rm php composer style:psalm
+	docker compose run --rm php-app composer style:psalm
 
 phpstan: ## Run PHPstan
 	$(MAKE) -s .print m="####### Run PHPStan"
-	docker compose run --rm php composer phpstan
+	docker compose run --rm php-app composer phpstan
 
 
 ### Fix
@@ -130,21 +130,21 @@ all-style-fixes asf: ## Run all Style fixes
 
 cs-fix: ## Run CS Fixer
 	$(MAKE) .print m="####### Run CS-Fixer"
-	docker compose run --rm php composer style:cs-fix
+	docker compose run --rm php-app composer style:cs-fix
 
 phpcs-fix: ## Code style fix
 	$(MAKE) .print m="####### Run PHP-CS Fixer"
-	docker compose run --rm php composer style:phpcbf
+	docker compose run --rm php-app composer style:phpcbf
 
 rector: ## Run Rector
 	$(MAKE) -s .print m="####### Run Rector"
-	docker compose run --rm php composer rector
+	docker compose run --rm php-app composer rector
 
 
 ## Architekture
 deptrac: ## Check Hexagonal architecture
 	$(MAKE) .print m="####### Run Deptrac"
-	docker compose run --rm php composer deptrac
+	docker compose run --rm php-app composer deptrac
 
 
 all-check: ## Run all comands (also with fix) in order. If it runs at the end, you code is ready to commit
@@ -156,6 +156,15 @@ all-check: ## Run all comands (also with fix) in order. If it runs at the end, y
 
 	$(MAKE) -s all-tests
 
+## CI / Deployment
+docker-push: ## Build and Push CI Image (requires IMAGE_NAME env)
+	$(MAKE) -s .print m="####### Building & Pushing Image: ${IMAGE_NAME}"
+	docker compose build
+	docker compose push
+
+docker-pull: ## Pull CI Image from Registry
+	$(MAKE) -s .print m="####### Pulling Image: ${IMAGE_NAME}"
+	docker compose pull
 
 
 

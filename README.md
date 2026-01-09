@@ -1,4 +1,4 @@
-# Strenges PHP 8.3 Template
+# Strenges PHP 8.4 Template
 
 **Modernes Template für PHP-Projekte mit den neuesten Tools, bereits vorkonfiguriert.**
 
