@@ -177,16 +177,19 @@ jobs:
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make docker-pull
 
-      - name: Start Docker Stack for Behat
+      - name: PHPUnit Unit Tests
+        run: make phpunit-unit
+
+      - name: PHPSpec
+        run: make spec
+
+      - name: Start Docker Stack for Feature Tests
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make start
 
-      - name: PHPUnit
-        run: make phpunit
-
-      - name: PHPSpec
-        run: make spec
+      - name: PHPUnit Feature Tests
+        run: make phpunit-feature
 
       - name: Behat
         run: make behat
