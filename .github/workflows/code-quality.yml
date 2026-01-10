@@ -307,10 +307,7 @@ jobs:
           echo "Services are ready!"
 
       - name: PHPUnit Unit Tests
-        run: make phpunit-unit
-
-      - name: PHPUnit Feature Tests
-        run: make phpunit-feature
+        run: make phpunit
 
       - name: Stop Docker Stack
         run: |
