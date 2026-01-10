@@ -176,15 +176,36 @@ docker-pull: ## Pull CI Image from Registry
 
 deploy: ## Deploy application (stage=production|staging)
 	$(MAKE) -s .print m="####### Deploying to ${stage}"
-	DEPLOYER_STAGE=${stage} docker compose run --rm php-app vendor/bin/dep deploy ${stage}
+	@if [ "${stage}" = "production" ]; then \
+		DEPLOYER_STAGE=production docker compose run --rm php-app vendor/bin/dep deploy $${DEPLOYER_PRODUCTION_HOST}; \
+	elif [ "${stage}" = "staging" ]; then \
+		DEPLOYER_STAGE=staging docker compose run --rm php-app vendor/bin/dep deploy $${DEPLOYER_STAGING_HOST}; \
+	else \
+		echo "Unknown stage: ${stage}"; \
+		exit 1; \
+	fi
 
 deploy-rollback: ## Rollback to previous release (stage=production|staging)
 	$(MAKE) -s .print m="####### Rolling back ${stage} to previous release"
-	DEPLOYER_STAGE=${stage} docker compose run --rm php-app vendor/bin/dep rollback ${stage}
+	@if [ "${stage}" = "production" ]; then \
+		DEPLOYER_STAGE=production docker compose run --rm php-app vendor/bin/dep rollback $${DEPLOYER_PRODUCTION_HOST}; \
+	elif [ "${stage}" = "staging" ]; then \
+		DEPLOYER_STAGE=staging docker compose run --rm php-app vendor/bin/dep rollback $${DEPLOYER_STAGING_HOST}; \
+	else \
+		echo "Unknown stage: ${stage}"; \
+		exit 1; \
+	fi
 
 deploy-list: ## List available releases (stage=production|staging)
 	$(MAKE) -s .print m="####### Listing releases for ${stage}"
-	DEPLOYER_STAGE=${stage} docker compose run --rm php-app vendor/bin/dep releases ${stage}
+	@if [ "${stage}" = "production" ]; then \
+		DEPLOYER_STAGE=production docker compose run --rm php-app vendor/bin/dep releases $${DEPLOYER_PRODUCTION_HOST}; \
+	elif [ "${stage}" = "staging" ]; then \
+		DEPLOYER_STAGE=staging docker compose run --rm php-app vendor/bin/dep releases $${DEPLOYER_STAGING_HOST}; \
+	else \
+		echo "Unknown stage: ${stage}"; \
+		exit 1; \
+	fi
 
 
 

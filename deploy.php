@@ -92,6 +92,19 @@ task('rollback', function () {
     info('Rollback to previous release successful!');
 });
 
+// Cleanup task
+task('cleanup', function () {
+    $releases = get('releases_list');
+    $keep = get('keep_releases', 3);
+    
+    if (count($releases) > $keep) {
+        $toRemove = array_slice($releases, $keep);
+        foreach ($toRemove as $release) {
+            run("rm -rf {{deploy_path}}/releases/$release");
+        }
+    }
+});
+
 // Remove any automatic deployment hooks
 // after('deploy:success', function () {
 //     info('Deployment successful!');
