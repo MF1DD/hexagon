@@ -1,0 +1,88 @@
+name: Docker Image Build
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    paths:
+      - 'Dockerfile'
+      - '.docker/**'
+      - 'composer.json'
+      - 'composer.lock'
+  pull_request:
+    branches: [ "main", "master" ]
+    paths:
+      - 'Dockerfile'
+      - '.docker/**'
+      - 'composer.json'
+      - 'composer.lock'
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force rebuild Docker image'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  REGISTRY: ghcr.io
+  COMPOSE_FILE: docker-compose.yml:docker-compose.ci.yml
+  UID: 1000
+  GID: 1000
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_name: ${{ steps.image-vars.outputs.lowercase_image_name }}
+      image_digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set image name to lowercase
+        id: image-vars
+        run: |
+          IMAGE_ID=$(echo "ghcr.io/${{ github.repository }}/php-app" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=$IMAGE_ID:latest" >> $GITHUB_ENV
+          echo "lowercase_image_name=$IMAGE_ID:latest" >> $GITHUB_OUTPUT
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=registry,ref=${{ env.IMAGE_NAME }}
+
+      - name: Set up Environment (Composer)
+        run: |
+          # Create vendor directory with correct permissions
+          mkdir -p vendor
+          chmod 777 vendor
+          make setup
+
+      - name: Cache Vendor Directory
+        uses: actions/cache/save@v3
+        with:
+          path: vendor
+          key: vendor-${{ hashFiles('composer.lock') }}
+
+  # No trigger job needed - workflow_run will handle this in code-quality.yml

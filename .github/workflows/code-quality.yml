@@ -1,4 +1,4 @@
-name: Code CI Pipeline
+name: Code Quality Pipeline
 
 on:
   push:
@@ -15,6 +15,21 @@ on:
       - '.docker/**'
       - 'composer.json'
       - 'composer.lock'
+  workflow_run:
+    workflows: ["Docker Image Build"]
+    types:
+      - completed
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+    inputs:
+      image_name:
+        description: 'Docker image name to use'
+        required: false
+        type: string
+      image_digest:
+        description: 'Docker image digest'
+        required: false
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -280,7 +295,7 @@ jobs:
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make docker-pull
 
-      - name: Start Docker Stack for Behat
+      - name: Start Docker Stack for Tests
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make start
@@ -293,6 +308,10 @@ jobs:
 
       - name: PHPUnit Unit Tests
         run: make phpunit
+
+      - name: Stop Docker Stack
+        run: |
+          make stop
 
   phpspec:
     name: Tests (PHPSpec)
@@ -405,7 +424,7 @@ jobs:
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make docker-pull
 
-      - name: Start Docker Stack for Behat
+      - name: Start Docker Stack for Infection
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           make start
@@ -418,3 +437,7 @@ jobs:
 
       - name: Infection
         run: make infection
+
+      - name: Stop Docker Stack
+        run: |
+          make stop
