@@ -44,7 +44,7 @@ task('deploy:clear_cache', function () {
     run('cd {{release_path}} && php bin/console cache:clear --env=prod');
 });
 
-// Custom deployment flow
+// Manual deployment only - no automatic triggers
 task('deploy', [
     'deploy:prepare',
     'deploy:shared',
@@ -65,7 +65,7 @@ task('rollback', function () {
     info('Rollback to previous release successful!');
 });
 
-// Success message
-after('deploy:success', function () {
-    info('Deployment successful!');
-});
+// Remove any automatic deployment hooks
+// after('deploy:success', function () {
+//     info('Deployment successful!');
+// });
