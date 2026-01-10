@@ -1,5 +1,5 @@
 .env
-.idea
-vendor
-var/logs
-.qa/phpcs/reports
+/.idea/
+/vendor/
+/var/logs/
+/.qa/phpcs/reports/
