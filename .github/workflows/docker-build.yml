@@ -2,9 +2,9 @@ name: Docker Image Build
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "stage" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "stage" ]
   workflow_dispatch:
     inputs:
       force_rebuild:
