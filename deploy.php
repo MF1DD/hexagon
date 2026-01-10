@@ -3,22 +3,34 @@ namespace Deployer;
 
 require 'recipe/symfony.php';
 
+// Load environment variables
+$env = [];
+if (file_exists(__DIR__ . '/.env')) {
+    $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '#') === 0) continue;
+        if (strpos($line, '=') === false) continue;
+        list($key, $value) = explode('=', $line, 2);
+        $env[trim($key)] = trim($value);
+    }
+}
+
 // Configuration
 set('application', 'hexagon');
-set('repository', 'git@github.com:username/hexagon.git');
+set('repository', 'git@github.com:mf1dd/hexagon.git');
 
 // Hosts
-host('production.example.com')
-    ->set('remote_user', 'deploy')
-    ->set('deploy_path', '/var/www/hexagon')
-    ->set('branch', 'main')
-    ->set('keep_releases', 5);
+host($env['DEPLOYER_PRODUCTION_HOST'] ?? 'production.example.com')
+    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'] ?? 'deploy')
+    ->set('deploy_path', $env['DEPLOYER_PRODUCTION_PATH'] ?? '/var/www/hexagon')
+    ->set('branch', $env['DEPLOYER_PRODUCTION_BRANCH'] ?? 'main')
+    ->set('keep_releases', (int)($env['DEPLOYER_PRODUCTION_RELEASES'] ?? 5));
 
-host('staging.example.com')
-    ->set('remote_user', 'deploy')
-    ->set('deploy_path', '/var/www/hexagon-staging')
-    ->set('branch', 'develop')
-    ->set('keep_releases', 3);
+host($env['DEPLOYER_STAGING_HOST'] ?? 'staging.example.com')
+    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'] ?? 'deploy')
+    ->set('deploy_path', $env['DEPLOYER_STAGING_PATH'] ?? '/var/www/hexagon-staging')
+    ->set('branch', $env['DEPLOYER_STAGING_BRANCH'] ?? 'develop')
+    ->set('keep_releases', (int)($env['DEPLOYER_STAGING_RELEASES'] ?? 3));
 
 // Tasks
 task('build', function () {
