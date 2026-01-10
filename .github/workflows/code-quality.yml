@@ -1,20 +1,6 @@
 name: Code Quality Pipeline
 
 on:
-  push:
-    branches: [ "main", "master" ]
-    paths-ignore:
-      - 'Dockerfile'
-      - '.docker/**'
-      - 'composer.json'
-      - 'composer.lock'
-  pull_request:
-    branches: [ "main", "master" ]
-    paths-ignore:
-      - 'Dockerfile'
-      - '.docker/**'
-      - 'composer.json'
-      - 'composer.lock'
   workflow_run:
     workflows: ["Docker Image Build"]
     types:
