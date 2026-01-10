@@ -20,17 +20,17 @@ set('application', 'hexagon');
 set('repository', 'git@github.com:mf1dd/hexagon.git');
 
 // Hosts
-host($env['DEPLOYER_PRODUCTION_HOST'] ?? 'production.example.com')
-    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'] ?? 'deploy')
-    ->set('deploy_path', $env['DEPLOYER_PRODUCTION_PATH'] ?? '/var/www/hexagon')
-    ->set('branch', $env['DEPLOYER_PRODUCTION_BRANCH'] ?? 'main')
-    ->set('keep_releases', (int)($env['DEPLOYER_PRODUCTION_RELEASES'] ?? 5));
+host($env['DEPLOYER_PRODUCTION_HOST'])
+    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'])
+    ->set('deploy_path', $env['DEPLOYER_PRODUCTION_PATH'])
+    ->set('branch', $env['DEPLOYER_PRODUCTION_BRANCH'])
+    ->set('keep_releases', (int)$env['DEPLOYER_PRODUCTION_RELEASES']);
 
-host($env['DEPLOYER_STAGING_HOST'] ?? 'staging.example.com')
-    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'] ?? 'deploy')
-    ->set('deploy_path', $env['DEPLOYER_STAGING_PATH'] ?? '/var/www/hexagon-staging')
-    ->set('branch', $env['DEPLOYER_STAGING_BRANCH'] ?? 'develop')
-    ->set('keep_releases', (int)($env['DEPLOYER_STAGING_RELEASES'] ?? 3));
+host($env['DEPLOYER_STAGING_HOST'])
+    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'])
+    ->set('deploy_path', $env['DEPLOYER_STAGING_PATH'])
+    ->set('branch', $env['DEPLOYER_STAGING_BRANCH'])
+    ->set('keep_releases', (int)$env['DEPLOYER_STAGING_RELEASES']);
 
 // Tasks
 task('build', function () {
