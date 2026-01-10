@@ -5,8 +5,23 @@ require 'recipe/symfony.php';
 
 // Load environment variables
 $env = [];
-if (file_exists(__DIR__ . '/.env')) {
-    $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$envFile = __DIR__ . '/.env';
+$stageEnvFile = __DIR__ . '/.env.' . ($_SERVER['DEPLOYER_STAGE'] ?? 'production');
+
+// Load base .env first
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '#') === 0) continue;
+        if (strpos($line, '=') === false) continue;
+        list($key, $value) = explode('=', $line, 2);
+        $env[trim($key)] = trim($value);
+    }
+}
+
+// Override with stage-specific .env
+if (file_exists($stageEnvFile)) {
+    $lines = file($stageEnvFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
         if (strpos($line, '#') === 0) continue;
         if (strpos($line, '=') === false) continue;

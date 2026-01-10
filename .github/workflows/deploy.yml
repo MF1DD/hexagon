@@ -77,7 +77,7 @@ jobs:
       - name: Deploy to ${{ github.event.inputs.environment }}
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
-          make deploy stage=${{ github.event.inputs.environment }}
+          DEPLOYER_STAGE=${{ github.event.inputs.environment }} make deploy stage=${{ github.event.inputs.environment }}
 
       - name: Notify deployment success
         run: |

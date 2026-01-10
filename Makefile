@@ -176,15 +176,15 @@ docker-pull: ## Pull CI Image from Registry
 
 deploy: ## Deploy application (stage=production|staging)
 	$(MAKE) -s .print m="####### Deploying to ${stage}"
-	docker compose run --rm php-app vendor/bin/dep deploy ${stage}
+	DEPLOYER_STAGE=${stage} docker compose run --rm php-app vendor/bin/dep deploy ${stage}
 
 deploy-rollback: ## Rollback to previous release (stage=production|staging)
 	$(MAKE) -s .print m="####### Rolling back ${stage} to previous release"
-	docker compose run --rm php-app vendor/bin/dep rollback ${stage}
+	DEPLOYER_STAGE=${stage} docker compose run --rm php-app vendor/bin/dep rollback ${stage}
 
 deploy-list: ## List available releases (stage=production|staging)
 	$(MAKE) -s .print m="####### Listing releases for ${stage}"
-	docker compose run --rm php-app vendor/bin/dep releases ${stage}
+	DEPLOYER_STAGE=${stage} docker compose run --rm php-app vendor/bin/dep releases ${stage}
 
 
 

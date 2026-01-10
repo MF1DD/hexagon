@@ -70,12 +70,12 @@ jobs:
       - name: List current releases
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
-          make deploy-list stage=${{ github.event.inputs.environment }}
+          DEPLOYER_STAGE=${{ github.event.inputs.environment }} make deploy-list stage=${{ github.event.inputs.environment }}
 
       - name: Rollback ${{ github.event.inputs.environment }}
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
-          make deploy-rollback stage=${{ github.event.inputs.environment }}
+          DEPLOYER_STAGE=${{ github.event.inputs.environment }} make deploy-rollback stage=${{ github.event.inputs.environment }}
 
       - name: Notify rollback success
         run: |
