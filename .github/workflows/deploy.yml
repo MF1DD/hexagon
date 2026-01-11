@@ -38,81 +38,24 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Set image name to lowercase
-        run: |
-          IMAGE_ID=$(echo "ghcr.io/${{ github.repository }}/php-app" | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE_NAME=$IMAGE_ID:latest" >> $GITHUB_ENV
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Restore Vendor Cache
         uses: actions/cache/restore@v3
         with:
           path: vendor
           key: vendor-${{ hashFiles('composer.lock') }}
 
-      - name: Pull Docker Image
-        run: |
-          export IMAGE_NAME=${{ env.IMAGE_NAME }}
-          make docker-pull
-
       - name: Setup SSH for deployment
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Optional: Installiere Dependencies lokal, falls Deployer sie zum Upload braucht
+      # oder falls deployer lokal ausgeführt wird.
+      - name: Install Dependencies
+        run: composer install --no-dev --prefer-dist
 
-      - name: Before Script
-        run: |
-          mkdir -p ~/.ssh
-          eval $(ssh-agent -s)
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-          ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-
-      # - name: Debug SSH setup
-      #   run: |
-      #     echo "SSH_AUTH_SOCK: $SSH_AUTH_SOCK"
-      #     echo "SSH_AGENT_PID: $SSH_AGENT_PID"
-      #     echo "Checking if key was added..."
-      #     ssh-add -l || echo "No keys found - checking format"
-          
-      # - name: Test SSH connection
-      #   run: |
-      #     echo "Testing SSH connection to playgx.de..."
-      #     ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ssh-w01230c2@playgx.de "echo 'SSH connection successful'" || echo "SSH connection failed - checking key format"
-          
-      # - name: Debug SSH Agent
-      #   run: |
-      #     echo "SSH Agent Status:"
-      #     ps aux | grep ssh-agent || echo "SSH Agent not running"
-      #     echo "SSH Keys loaded:"
-      #     ssh-add -l || echo "No keys loaded"
-      #     echo "Environment check:"
-      #     env | grep SSH
-
-      # - name: Add known hosts
-      #   run: |
-      #     ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
-
-      - name: Manual unlock (if needed)
-        run: |
-          echo "Attempting to unlock deployment..."
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=no ssh-w01230c2@playgx.de "rm -f /www/htdocs/w01230c2/mf1dd/staging/.dep/deploy.lock" || echo "No lock found or unlock failed"
-
+      # Einfach direkt deployen. Der Agent läuft bereits.
       - name: Deploy to ${{ github.event.inputs.environment }}
         run: |
-          export IMAGE_NAME=${{ env.IMAGE_NAME }}
-          DEPLOYER_STAGE=${{ github.event.inputs.environment }} make deploy stage=${{ github.event.inputs.environment }}
-
-      - name: Notify deployment success
-        run: |
-          echo "🚀 Deployment to ${{ github.event.inputs.environment }} completed successfully!"
-          echo "Branch: ${{ github.event.inputs.branch }}"
-          echo "Commit: ${{ github.sha }}"
+           # Wir gehen davon aus, dass `make deploy` intern `dep deploy` aufruft
+           make deploy stage=${{ github.event.inputs.environment }}

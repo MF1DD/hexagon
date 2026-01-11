@@ -12,6 +12,8 @@ RUN apt-get install -y  \
     unzip  \
     libicu-dev
 
+RUN apt-get install -y rsync openssh-client && rm -rf /var/lib/apt/lists/*
+
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 

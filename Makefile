@@ -1,6 +1,17 @@
 .DEFAULT_GOAL := help
 .SILENT:
 
+stage ?= staging
+# 1. Standard: Wir gehen davon aus, wir sind LOKAL (also Docker nutzen)
+#    Wir mounten .ssh read-only, damit Deployer Keys hat.
+PHP_RUNNER = docker compose run --rm -v $(HOME)/.ssh:/root/.ssh:ro -e HOME=/root --user root php-app
+
+# 2. Ausnahme: Wenn wir wirklich in der CI sind (GitHub gibt 'true' zurück)
+#    Dann machen wir die Variable leer -> Befehl läuft nativ
+ifeq ($(CI), true)
+    PHP_RUNNER = 
+endif
+
 $(shell [ -f .env ] || cp ./.env.skeleton .env)
 $(shell [ -d ./var/logs/nginx ] || mkdir -p ./var/logs/nginx)
 
@@ -27,8 +38,8 @@ help:
 ## Docker-Container
 setup: ## Install composer thinks
 	$(MAKE) -s .print m="####### Composer dump-autoload and install"
-	docker compose run --rm php-app composer dump-autoload
-	docker compose run --rm php-app composer install
+	$(PHP_RUNNER) composer dump-autoload
+	$(PHP_RUNNER) composer install
 
 build rebuild: ## Build or rebuild the container
 	$(MAKE) -s .print m="####### Build images from Dockerfile"
@@ -44,15 +55,15 @@ stop down 0: ## Stop container
 
 console c: ## Open console
 	$(MAKE) -s .print m="####### Start Console"
-	docker compose run --rm php-app /bin/bash
+	$(PHP_RUNNER) /bin/bash
 
 bin-console: ## Command with c=help
 	$(MAKE) -s .print m="####### Run bin/console $(c)"
-	docker compose run --rm php-app bin/console $(c)
+	$(PHP_RUNNER) bin/console $(c)
 	echo "\n"
 
 composer-install: ## Run composer install
-	docker compose run --rm php-app composer install
+	$(PHP_RUNNER) composer install
 
 ## Tests
 
@@ -64,40 +75,40 @@ all-tests: ## Run all Tests
 
 phpunit: ## Run phpunit Tests
 	$(MAKE) .print m="####### Run PHPUnit"
-	docker compose run --rm php-app composer test:phpunit
+	$(PHP_RUNNER) composer test:phpunit
 
 phpunit-unit: ## Run Unit Tests only
 	$(MAKE) .print m="####### Run PHPUnit Unit Tests"
-	docker compose run --rm php-app composer test:phpunit-unit
+	$(PHP_RUNNER) composer test:phpunit-unit
 
 phpunit-feature: ## Run Feature Tests (requires running stack)
 	$(MAKE) .print m="####### Run PHPUnit Feature Tests"
-	docker compose exec php-app composer test:phpunit-feature
+	$(PHP_RUNNER) composer test:phpunit-feature
 
 coverage: ## Run phpunit Coverage
 	$(MAKE) -s .print m="####### Check Coverage"
-	docker compose run --rm -e XDEBUG_MODE=coverage php-app composer coverage
+	$(PHP_RUNNER) composer coverage
 
 coverage-html: ## Run phpunit Coverage wit HTML output
 	$(MAKE) -s .print m="####### Run Check Coverage HTML"
-	docker compose run --rm -e XDEBUG_MODE=coverage php-app composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
+	$(PHP_RUNNER) composer coverage-html -- $(filter-out $@,$(MAKECMDGOALS))
 
 infection: ## Run mutationen
 	$(MAKE) .print m="####### Run Infection"
-	docker compose run --rm php-app composer test:infection -- $(arg)
+	$(PHP_RUNNER) composer test:infection -- $(arg)
 
 .PHONY: spec
 spec: ## Run Spec Tests (Behaviour) | n='namespace'
 	$(MAKE) -s .print m="####### Run Spec"
-	docker compose run --rm php-app composer test:phpspec -- $${n}
+	$(PHP_RUNNER) composer test:phpspec -- $${n}
 
 behat: ## Run all behat Tests
 	$(MAKE) -s .print m="####### Run Behat"
-	docker compose run --rm php-app composer test:behat
+	$(PHP_RUNNER) composer test:behat
 
 spec-init: ## Run Spec init Tests (Behaviour)
 	$(MAKE) -s .print m="####### Run Spec Init"
-	docker compose run --rm php-app composer test:phpspec-init
+	$(PHP_RUNNER) composer test:phpspec-init
 
 ## Code - Style
 ### Check
@@ -111,23 +122,23 @@ all-style-checks asc: ## Run all Style checks
 
 cs-check: ## Run CS Fixer
 	$(MAKE) .print m="####### Run CS-Check"
-	docker compose run --rm php-app composer style:cs
+	$(PHP_RUNNER) composer style:cs
 
 phpcs-check: ## Code style check
 	$(MAKE) .print m="####### Run PHP-CS"
-	docker compose run --rm php-app composer style:phpcs
+	$(PHP_RUNNER) composer style:phpcs
 
 rector-check: ## Run Rector
 	$(MAKE) -s .print m="####### Run Rector"
-	docker compose run --rm php-app composer rector-check
+	$(PHP_RUNNER) composer rector-check
 
 psalm: ## Run psalm
 	$(MAKE) .print m="####### Run Psalm"
-	docker compose run --rm php-app composer style:psalm
+	$(PHP_RUNNER) composer style:psalm
 
 phpstan: ## Run PHPstan
 	$(MAKE) -s .print m="####### Run PHPStan"
-	docker compose run --rm php-app composer phpstan
+	$(PHP_RUNNER) composer phpstan
 
 
 ### Fix
@@ -138,21 +149,21 @@ all-style-fixes asf: ## Run all Style fixes
 
 cs-fix: ## Run CS Fixer
 	$(MAKE) .print m="####### Run CS-Fixer"
-	docker compose run --rm php-app composer style:cs-fix
+	$(PHP_RUNNER) composer style:cs-fix
 
 phpcs-fix: ## Code style fix
 	$(MAKE) .print m="####### Run PHP-CS Fixer"
-	docker compose run --rm php-app composer style:phpcbf
+	$(PHP_RUNNER) composer style:phpcbf
 
 rector: ## Run Rector
 	$(MAKE) -s .print m="####### Run Rector"
-	docker compose run --rm php-app composer rector
+	$(PHP_RUNNER) composer rector
 
 
 ## Architekture
 deptrac: ## Check Hexagonal architecture
 	$(MAKE) .print m="####### Run Deptrac"
-	docker compose run --rm php-app composer deptrac
+	$(PHP_RUNNER) composer deptrac
 
 
 all-check: ## Run all comands (also with fix) in order. If it runs at the end, you code is ready to commit
@@ -174,38 +185,30 @@ docker-pull: ## Pull CI Image from Registry
 	$(MAKE) -s .print m="####### Pulling Image: ${IMAGE_NAME}"
 	docker compose pull
 
-deploy: ## Deploy application (stage=production|staging)
-	$(MAKE) -s .print m="####### Deploying to ${stage}"
-	@if [ "${stage}" = "production" ]; then \
-		docker compose run --rm php-app vendor/bin/dep deploy $${DEPLOYER_PRODUCTION_HOST}; \
-	elif [ "${stage}" = "staging" ]; then \
-		docker compose run --rm php-app vendor/bin/dep deploy $${DEPLOYER_STAGING_HOST}; \
-	else \
-		echo "Unknown stage: ${stage}"; \
-		exit 1; \
-	fi
+# --- Commands ---
 
-deploy-rollback: ## Rollback to previous release (stage=production|staging)
-	$(MAKE) -s .print m="####### Rolling back ${stage} to previous release"
-	@if [ "${stage}" = "production" ]; then \
-		docker compose run --rm -v ~/.ssh:/root/.ssh:ro -e HOME=/root --user root php-app vendor/bin/dep rollback $${DEPLOYER_PRODUCTION_HOST}; \
-	elif [ "${stage}" = "staging" ]; then \
-		docker compose run --rm -v ~/.ssh:/root/.ssh:ro -e HOME=/root --user root php-app vendor/bin/dep rollback $${DEPLOYER_STAGING_HOST}; \
-	else \
-		echo "Unknown stage: ${stage}"; \
-		exit 1; \
-	fi
+deploy: ## Deploy application (usage: make deploy stage=production)
+	$(MAKE) -s .print m="####### Deploying to $(stage)"
+	$(PHP_RUNNER) vendor/bin/dep deploy $(stage) -vv
 
-deploy-list: ## List available releases (stage=production|staging)
-	$(MAKE) -s .print m="####### Listing releases for ${stage}"
-	@if [ "${stage}" = "production" ]; then \
-		docker compose run --rm -v ~/.ssh:/root/.ssh:ro -e HOME=/root --user root php-app vendor/bin/dep releases $${DEPLOYER_PRODUCTION_HOST}; \
-	elif [ "${stage}" = "staging" ]; then \
-		docker compose run --rm -v ~/.ssh:/root/.ssh:ro -e HOME=/root --user root php-app vendor/bin/dep releases $${DEPLOYER_STAGING_HOST}; \
-	else \
-		echo "Unknown stage: ${stage}"; \
-		exit 1; \
-	fi
+deploy-rollback: ## Rollback to previous release
+	$(MAKE) -s .print m="####### Rolling back $(stage)"
+	$(PHP_RUNNER) vendor/bin/dep rollback $(stage)
+
+deploy-list: ## List available releases
+	$(MAKE) -s .print m="####### Listing releases for $(stage)"
+	$(PHP_RUNNER) vendor/bin/dep releases $(stage)
+
+deploy-unlock: ## Unlock deployment (if failed previously)
+	$(MAKE) -s .print m="####### Unlocking $(stage)"
+	$(PHP_RUNNER) vendor/bin/dep deploy:unlock $(stage)
+
+.print:
+	@echo "\n\033[34m$m\033[0m"
+
+# Hilfs-Target um zu prüfen, wie ausgeführt wird
+debug-env:
+	@echo "Runner Command: $(PHP_RUNNER)"
 
 .print:
 	printf "\033[33m\n${m}\033[0m\n"
