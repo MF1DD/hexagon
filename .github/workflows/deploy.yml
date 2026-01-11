@@ -31,12 +31,6 @@ jobs:
     permissions:
       contents: read
       packages: read
-    before_script:
-      - mkdir -p ~/.ssh
-      - eval $(ssh-agent -s)
-      - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-      - chmod 644 ~/.ssh/known_hosts
-      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     
     steps:
       - name: Checkout code
@@ -72,30 +66,40 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
-      - name: Debug SSH setup
-        run: |
-          echo "SSH_AUTH_SOCK: $SSH_AUTH_SOCK"
-          echo "SSH_AGENT_PID: $SSH_AGENT_PID"
-          echo "Checking if key was added..."
-          ssh-add -l || echo "No keys found - checking format"
-          
-      - name: Test SSH connection
-        run: |
-          echo "Testing SSH connection to playgx.de..."
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ssh-w01230c2@playgx.de "echo 'SSH connection successful'" || echo "SSH connection failed - checking key format"
-          
-      - name: Debug SSH Agent
-        run: |
-          echo "SSH Agent Status:"
-          ps aux | grep ssh-agent || echo "SSH Agent not running"
-          echo "SSH Keys loaded:"
-          ssh-add -l || echo "No keys loaded"
-          echo "Environment check:"
-          env | grep SSH
 
-      - name: Add known hosts
+      - name: Before Script
         run: |
+          mkdir -p ~/.ssh
+          eval $(ssh-agent -s)
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
           ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+      # - name: Debug SSH setup
+      #   run: |
+      #     echo "SSH_AUTH_SOCK: $SSH_AUTH_SOCK"
+      #     echo "SSH_AGENT_PID: $SSH_AGENT_PID"
+      #     echo "Checking if key was added..."
+      #     ssh-add -l || echo "No keys found - checking format"
+          
+      # - name: Test SSH connection
+      #   run: |
+      #     echo "Testing SSH connection to playgx.de..."
+      #     ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ssh-w01230c2@playgx.de "echo 'SSH connection successful'" || echo "SSH connection failed - checking key format"
+          
+      # - name: Debug SSH Agent
+      #   run: |
+      #     echo "SSH Agent Status:"
+      #     ps aux | grep ssh-agent || echo "SSH Agent not running"
+      #     echo "SSH Keys loaded:"
+      #     ssh-add -l || echo "No keys loaded"
+      #     echo "Environment check:"
+      #     env | grep SSH
+
+      # - name: Add known hosts
+      #   run: |
+      #     ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
 
       - name: Manual unlock (if needed)
         run: |
