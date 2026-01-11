@@ -5,7 +5,8 @@
     "php": "^8.4",
     "slim/slim": "^4.14",
     "symfony/console": "^7.3",
-    "slim/psr7": "^1.7"
+    "slim/psr7": "^1.7",
+    "guzzlehttp/psr7": "^2.8"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
