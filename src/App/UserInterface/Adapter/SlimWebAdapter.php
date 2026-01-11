@@ -29,6 +29,9 @@ final class SlimWebAdapter
         $app->get('/', LuckyNumberController::class);
         $app->get('/lucky-number', LuckyNumberController::class);
 
+        // Debugging
+        $app->addErrorMiddleware(true, true, true);
+
         return $app;
     }
 }

@@ -16,7 +16,7 @@ final readonly class LuckyNumberController
         $luckyNumber = $generateLuckyNumberHandler();
 
         return ResponseAdapter::response(
-            body: (string) $luckyNumber,
+            content: (string) $luckyNumber,
         );
     }
 }
