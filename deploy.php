@@ -1,56 +1,31 @@
 <?php
 namespace Deployer;
 
-require 'recipe/symfony.php';
+require 'recipe/common.php';
 
-// Load environment variables
-$env = [];
-$envFile = __DIR__ . '/.env';
-$stageEnvFile = __DIR__ . '/.env.' . ($_SERVER['DEPLOYER_STAGE'] ?? 'production');
-
-// Load base .env first
-if (file_exists($envFile)) {
-    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos($line, '#') === 0) continue;
-        if (strpos($line, '=') === false) continue;
-        list($key, $value) = explode('=', $line, 2);
-        $env[trim($key)] = trim($value);
-    }
-}
-
-// Override with stage-specific .env
-if (file_exists($stageEnvFile)) {
-    $lines = file($stageEnvFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos($line, '#') === 0) continue;
-        if (strpos($line, '=') === false) continue;
-        list($key, $value) = explode('=', $line, 2);
-        $env[trim($key)] = trim($value);
-    }
-}
 
 // Configuration
 set('application', 'hexagon');
-set('repository', 'git@github.com:mf1dd/hexagon.git');
+#set('repository', 'https://github.com/mf1dd/hexagon.git');
+set('repository', 'github.com:mf1dd/hexagon.git');
 
 // Hosts
-host($env['DEPLOYER_PRODUCTION_HOST'])
-    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'])
-    ->set('deploy_path', $env['DEPLOYER_PRODUCTION_PATH'])
-    ->set('branch', $env['DEPLOYER_PRODUCTION_BRANCH'])
-    ->set('keep_releases', (int)$env['DEPLOYER_PRODUCTION_RELEASES']);
+host('playgx.de')
+    ->set('remote_user', 'ssh-w01230c2')
+    ->set('deploy_path', '/www/htdocs/w01230c2/mf1dd/production')
+    ->set('branch', 'main')
+    ->set('keep_releases', 3);
 
-host($env['DEPLOYER_STAGING_HOST'])
-    ->set('remote_user', $env['DEPLOYER_REMOTE_USER'])
-    ->set('deploy_path', $env['DEPLOYER_STAGING_PATH'])
-    ->set('branch', $env['DEPLOYER_STAGING_BRANCH'])
-    ->set('keep_releases', (int)$env['DEPLOYER_STAGING_RELEASES']);
+host('playgx.de')
+    ->set('remote_user', 'ssh-w01230c2')
+    ->set('deploy_path', '/www/htdocs/w01230c2/mf1dd/staging')
+    ->set('branch', 'stage')
+    ->set('keep_releases', 3);
 
 // Tasks
 task('build', function () {
     run('cd {{release_path}} && composer install --no-dev --optimize-autoloader');
-    run('cd {{release_path}} && npm install && npm run build');
+    run('cd {{release_path}} && make setup');
 });
 
 task('deploy:shared_files', function () {
@@ -73,6 +48,7 @@ task('deploy:clear_cache', function () {
 
 // Manual deployment only - no automatic triggers
 task('deploy', [
+    'deploy:unlock',
     'deploy:prepare',
     'deploy:shared',
     'deploy:writable',
