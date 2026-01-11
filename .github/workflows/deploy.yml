@@ -76,7 +76,16 @@ jobs:
       - name: Test SSH connection
         run: |
           echo "Testing SSH connection to playgx.de..."
-          ssh -o BatchMode=yes -o ConnectTimeout=10 ssh-w01230c2@playgx.de "echo 'SSH connection successful'" || echo "SSH connection failed"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ssh-w01230c2@playgx.de "echo 'SSH connection successful'" || echo "SSH connection failed - checking key format"
+          
+      - name: Debug SSH Agent
+        run: |
+          echo "SSH Agent Status:"
+          ps aux | grep ssh-agent || echo "SSH Agent not running"
+          echo "SSH Keys loaded:"
+          ssh-add -l || echo "No keys loaded"
+          echo "Environment check:"
+          env | grep SSH
 
       - name: Add known hosts
         run: |
