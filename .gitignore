@@ -3,3 +3,4 @@
 /vendor/
 /var/logs/
 /.qa/phpcs/reports/
+.php-cs-fixer.cache
