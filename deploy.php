@@ -6,7 +6,8 @@ require 'recipe/common.php';
 
 // Configuration
 set('application', 'hexagon');
-set('repository', 'https://github.com/mf1dd/hexagon.git');
+#set('repository', 'https://github.com/mf1dd/hexagon.git');
+set('repository', 'github.com:mf1dd/hexagon.git');
 
 // Global SSH configuration
 set('ssh_multiplexing', false);

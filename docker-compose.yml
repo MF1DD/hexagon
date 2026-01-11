@@ -3,6 +3,7 @@ services:
     build: .
     volumes:
       - .:/app
+      - ~/.ssh:/home/appuser/.ssh:ro
     working_dir: /app
     user: "${UID}:${GID}"
     environment:
