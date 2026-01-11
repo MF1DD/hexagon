@@ -6,25 +6,24 @@ require 'recipe/common.php';
 
 // Configuration
 set('application', 'hexagon');
-#set('repository', 'https://github.com/mf1dd/hexagon.git');
-set('repository', 'github.com:mf1dd/hexagon.git');
+set('repository', 'https://github.com/mf1dd/hexagon.git');
+
+// Global SSH configuration
+set('ssh_multiplexing', false);
+set('ssh_options', '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null');
 
 // Hosts
 host('playgx.de')
     ->set('remote_user', 'ssh-w01230c2')
     ->set('deploy_path', '/www/htdocs/w01230c2/mf1dd/production')
     ->set('branch', 'main')
-    ->set('keep_releases', 3)
-    ->set('ssh_multiplexing', false)
-    ->set('ssh_options', '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null');
+    ->set('keep_releases', 3);
 
 host('playgx.de')
     ->set('remote_user', 'ssh-w01230c2')
     ->set('deploy_path', '/www/htdocs/w01230c2/mf1dd/staging')
     ->set('branch', 'stage')
-    ->set('keep_releases', 3)
-    ->set('ssh_multiplexing', false)
-    ->set('ssh_options', '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null');
+    ->set('keep_releases', 3);
 
 // Tasks
 task('build', function () {

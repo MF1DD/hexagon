@@ -91,6 +91,11 @@ jobs:
         run: |
           ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
 
+      - name: Manual unlock (if needed)
+        run: |
+          echo "Attempting to unlock deployment..."
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=no ssh-w01230c2@playgx.de "rm -f /www/htdocs/w01230c2/mf1dd/staging/.dep/deploy.lock" || echo "No lock found or unlock failed"
+
       - name: Deploy to ${{ github.event.inputs.environment }}
         run: |
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
