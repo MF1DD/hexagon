@@ -8,11 +8,11 @@ require 'contrib/rsync.php';
 set('application', 'hexagon');
 set('shared_files', ['.env']);
 set('shared_dirs', ['var/logs', 'var/cache']);
-set('ssh_multiplexing', false); // Bei CI/CD oft sicherer auf false
+set('ssh_multiplexing', false);
 
 // RSYNC Konfiguration
 // Das ersetzt das "git clone" auf dem Server.
-set('rsync_src', __DIR__); // Das Verzeichnis in der GitHub Action
+set('rsync_src', __DIR__);
 set('rsync_dest', '{{release_path}}');
 set('rsync', [
     'exclude' => [
@@ -22,7 +22,7 @@ set('rsync', [
         'tests',
         'node_modules',
         '.env.local',
-        '.env',         // .env nicht hochladen, wird generiert/gelinkt
+        '.env',
     ],
     'exclude-file' => false,
     'include' => [],
@@ -30,7 +30,7 @@ set('rsync', [
     'filter' => [],
     'filter-file' => false,
     'filter-perdir' => false,
-    'flags' => 'rz',  // r=recursive, z=compress
+    'flags' => 'rz',
     'options' => ['delete'],
     'timeout' => 300,
 ]);
@@ -54,30 +54,24 @@ host('staging')
 
 // --- Tasks ---
 
-// Überschreibe den Standard-Git-Task mit Rsync
 task('deploy:update_code', function () {
     invoke('rsync');
 });
 
-// Dein custom Build & Setup Prozess
 task('build', function () {
-    // 1. Composer auf dem Server ausführen (sicherer als lokal wegen PHP Versionen)
     run('cd {{release_path}} && composer install --no-dev --optimize-autoloader');
 });
 
-// --- Der Ablauf ---
-desc('Deploys your project');
 task('deploy', [
     'deploy:unlock',
-    'deploy:prepare',       // Legt release Ordner an
-    'deploy:update_code',   // Lädt Dateien hoch (RSYNC)
-    'deploy:shared',        // Symlinkt shared dirs (.env, logs)
-    'deploy:writable',      // Setzt Rechte
-    'build',                // Composer & Make Setup
-    'deploy:symlink',       // Der magische Switch (Zero Downtime)
-    'deploy:cleanup',       // Löscht alte Releases
+    'deploy:prepare',
+    'deploy:update_code',
+    'deploy:shared',
+    'deploy:writable',
+    'build',
+    'deploy:symlink',
+    'deploy:cleanup',
     'deploy:success',
 ]);
 
-// Falls was schief geht: Unlocken
 after('deploy:failed', 'deploy:unlock');

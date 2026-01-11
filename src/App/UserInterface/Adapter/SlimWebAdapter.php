@@ -20,9 +20,6 @@ final class SlimWebAdapter
         $app->run();
     }
 
-    /**
-     * @return App<ContainerInterface|null>
-     */
     public static function createApp(): App
     {
         $app = AppFactory::create();
