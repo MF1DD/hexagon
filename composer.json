@@ -21,7 +21,8 @@
     "guzzlehttp/guzzle": "^7.9.3",
     "deptrac/deptrac": "^3.0.0",
     "phpunit/php-code-coverage": "^12.3",
-    "deployer/deployer": "^7.3"
+    "deployer/deployer": "^7.3",
+    "deployer/recipes": "^6.2"
   },
   "autoload": {
     "psr-4": {
