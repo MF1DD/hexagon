@@ -68,6 +68,7 @@ task('build', function () {
 // --- Der Ablauf ---
 desc('Deploys your project');
 task('deploy', [
+    'deploy:unlock',
     'deploy:prepare',       // Legt release Ordner an
     'deploy:update_code',   // Lädt Dateien hoch (RSYNC)
     'deploy:shared',        // Symlinkt shared dirs (.env, logs)
