@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UserInterface\Web\Adapter;
 
-use GuzzleHttp\Psr7\Response;
+use Slim\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Utils\PHPStan\Attribute\NoTestNeeded;
