@@ -6,14 +6,13 @@ namespace App\UserInterface\Web\Adapter;
 
 use Slim\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Utils\PHPStan\Attribute\NoTestNeeded;
 
 #[NoTestNeeded]
 final class ResponseAdapter
 {
     /**
-     * @param StreamInterface|resource|string|null $content
+     * @param resource|string|null $content
      */
     public static function response(
         mixed $content,

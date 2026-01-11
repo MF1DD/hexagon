@@ -209,6 +209,3 @@ deploy-unlock: ## Unlock deployment (if failed previously)
 # Hilfs-Target um zu prüfen, wie ausgeführt wird
 debug-env:
 	@echo "Runner Command: $(PHP_RUNNER)"
-
-.print:
-	printf "\033[33m\n${m}\033[0m\n"
