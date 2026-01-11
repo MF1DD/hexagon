@@ -9,7 +9,6 @@ set('application', 'hexagon');
 set('shared_files', ['.env']);
 set('shared_dirs', ['var/logs', 'var/cache']);
 set('ssh_multiplexing', false); // Bei CI/CD oft sicherer auf false
-set('ssh_options', '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null');
 
 // RSYNC Konfiguration
 // Das ersetzt das "git clone" auf dem Server.
@@ -38,6 +37,7 @@ set('rsync', [
 
 // --- Hosts ---
 host('production')
+    ->set('ssh_args', ['-o StrictHostKeyChecking=no', '-o UserKnownHostsFile=/dev/null'])
     ->set('hostname', 'playgx.de')
     ->set('remote_user', 'ssh-w01230c2')
     ->set('deploy_path', '/www/htdocs/w01230c2/mf1dd/production')
@@ -45,6 +45,7 @@ host('production')
     ->set('labels', ['stage' => 'production']);
 
 host('staging')
+    ->set('ssh_args', ['-o StrictHostKeyChecking=no', '-o UserKnownHostsFile=/dev/null'])
     ->set('hostname', 'playgx.de')
     ->set('remote_user', 'ssh-w01230c2')
     ->set('deploy_path', '/www/htdocs/w01230c2/mf1dd/staging')
@@ -61,7 +62,7 @@ task('deploy:update_code', function () {
 // Dein custom Build & Setup Prozess
 task('build', function () {
     // 1. Composer auf dem Server ausführen (sicherer als lokal wegen PHP Versionen)
-    run('cd {{release_path}} && composer install --prefer-dist --optimize-autoloader');
+    run('cd {{release_path}} && composer install --no-dev --optimize-autoloader');
 });
 
 // --- Der Ablauf ---

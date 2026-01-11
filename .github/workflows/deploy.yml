@@ -52,7 +52,7 @@ jobs:
       # Optional: Installiere Dependencies lokal, falls Deployer sie zum Upload braucht
       # oder falls deployer lokal ausgeführt wird.
       - name: Install Dependencies
-        run: composer install --no-dev --prefer-dist
+        run: composer install --prefer-dist
 
       # Einfach direkt deployen. Der Agent läuft bereits.
       - name: Deploy to ${{ github.event.inputs.environment }}
