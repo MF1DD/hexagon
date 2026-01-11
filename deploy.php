@@ -61,7 +61,7 @@ task('deploy:update_code', function () {
 // Dein custom Build & Setup Prozess
 task('build', function () {
     // 1. Composer auf dem Server ausführen (sicherer als lokal wegen PHP Versionen)
-    run('cd {{release_path}} && composer install --prefer-dist --optimize-autoloader');
+    run('cd {{release_path}} && composer install --no-dev --optimize-autoloader');
 });
 
 // --- Der Ablauf ---
