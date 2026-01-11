@@ -70,15 +70,17 @@ jobs:
         run: |
           echo "SSH_AUTH_SOCK: $SSH_AUTH_SOCK"
           echo "SSH_AGENT_PID: $SSH_AGENT_PID"
-          ssh-add -l
+          echo "Checking if key was added..."
+          ssh-add -l || echo "No keys found - checking format"
+          
+      - name: Test SSH connection
+        run: |
+          echo "Testing SSH connection to playgx.de..."
+          ssh -o BatchMode=yes -o ConnectTimeout=10 ssh-w01230c2@playgx.de "echo 'SSH connection successful'" || echo "SSH connection failed"
 
       - name: Add known hosts
         run: |
-          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
-            ssh-keyscan -H hexagon.mf1dd.com >> ~/.ssh/known_hosts
-          else
-            ssh-keyscan -H stage.hexagon.mf1dd.com >> ~/.ssh/known_hosts
-          fi
+          ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         run: |
