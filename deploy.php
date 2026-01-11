@@ -48,7 +48,6 @@ task('deploy:clear_cache', function () {
 
 // Manual deployment only - no automatic triggers
 task('deploy', [
-    'deploy:unlock',
     'deploy:prepare',
     'deploy:shared',
     'deploy:writable',
