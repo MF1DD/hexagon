@@ -48,6 +48,11 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Add Server to Known Hosts
+        # Ersetze dein-server.de mit deinem echten Hostnamen!
+        run: |
+           ssh-keyscan -H playgx.de >> ~/.ssh/known_hosts
 
       # Optional: Installiere Dependencies lokal, falls Deployer sie zum Upload braucht
       # oder falls deployer lokal ausgeführt wird.
