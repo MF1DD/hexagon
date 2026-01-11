@@ -177,9 +177,9 @@ docker-pull: ## Pull CI Image from Registry
 deploy: ## Deploy application (stage=production|staging)
 	$(MAKE) -s .print m="####### Deploying to ${stage}"
 	@if [ "${stage}" = "production" ]; then \
-		DEPLOYER_STAGE=production docker compose run --rm php-app vendor/bin/dep deploy $${DEPLOYER_PRODUCTION_HOST}; \
+		docker compose run --rm -v ~/.ssh:/root/.ssh -e HOME=/root --user root php-app sh -c "chown -R root:root /root/.ssh && ls -la /root/.ssh && chmod 600 /root/.ssh/id_* && chmod 644 /root/.ssh/*.pub && chmod 700 /root/.ssh && vendor/bin/dep deploy $${DEPLOYER_PRODUCTION_HOST}"; \
 	elif [ "${stage}" = "staging" ]; then \
-		DEPLOYER_STAGE=staging docker compose run --rm php-app vendor/bin/dep deploy $${DEPLOYER_STAGING_HOST}; \
+		docker compose run --rm -v ~/.ssh:/root/.ssh -e HOME=/root --user root php-app sh -c "chown -R root:root /root/.ssh && ls -la /root/.ssh && chmod 600 /root/.ssh/id_* && chmod 644 /root/.ssh/*.pub && chmod 700 /root/.ssh && vendor/bin/dep deploy $${DEPLOYER_STAGING_HOST}"; \
 	else \
 		echo "Unknown stage: ${stage}"; \
 		exit 1; \
@@ -188,9 +188,9 @@ deploy: ## Deploy application (stage=production|staging)
 deploy-rollback: ## Rollback to previous release (stage=production|staging)
 	$(MAKE) -s .print m="####### Rolling back ${stage} to previous release"
 	@if [ "${stage}" = "production" ]; then \
-		DEPLOYER_STAGE=production docker compose run --rm php-app vendor/bin/dep rollback $${DEPLOYER_PRODUCTION_HOST}; \
+		docker compose run --rm -v ~/.ssh:/root/.ssh -e HOME=/root --user root php-app sh -c "chown -R root:root /root/.ssh && ls -la /root/.ssh && chmod 600 /root/.ssh/id_* && chmod 644 /root/.ssh/*.pub && chmod 700 /root/.ssh && vendor/bin/dep rollback $${DEPLOYER_PRODUCTION_HOST}"; \
 	elif [ "${stage}" = "staging" ]; then \
-		DEPLOYER_STAGE=staging docker compose run --rm php-app vendor/bin/dep rollback $${DEPLOYER_STAGING_HOST}; \
+		docker compose run --rm -v ~/.ssh:/root/.ssh -e HOME=/root --user root php-app sh -c "chown -R root:root /root/.ssh && ls -la /root/.ssh && chmod 600 /root/.ssh/id_* && chmod 644 /root/.ssh/*.pub && chmod 700 /root/.ssh && vendor/bin/dep rollback $${DEPLOYER_STAGING_HOST}"; \
 	else \
 		echo "Unknown stage: ${stage}"; \
 		exit 1; \
@@ -199,9 +199,9 @@ deploy-rollback: ## Rollback to previous release (stage=production|staging)
 deploy-list: ## List available releases (stage=production|staging)
 	$(MAKE) -s .print m="####### Listing releases for ${stage}"
 	@if [ "${stage}" = "production" ]; then \
-		DEPLOYER_STAGE=production docker compose run --rm php-app vendor/bin/dep releases $${DEPLOYER_PRODUCTION_HOST}; \
+		docker compose run --rm -v ~/.ssh:/root/.ssh -e HOME=/root --user root php-app sh -c "chown -R root:root /root/.ssh && ls -la /root/.ssh && chmod 600 /root/.ssh/id_* && chmod 644 /root/.ssh/*.pub && chmod 700 /root/.ssh && vendor/bin/dep releases $${DEPLOYER_PRODUCTION_HOST}"; \
 	elif [ "${stage}" = "staging" ]; then \
-		DEPLOYER_STAGE=staging docker compose run --rm php-app vendor/bin/dep releases $${DEPLOYER_STAGING_HOST}; \
+		docker compose run --rm -v ~/.ssh:/root/.ssh -e HOME=/root --user root php-app sh -c "chown -R root:root /root/.ssh && ls -la /root/.ssh && chmod 600 /root/.ssh/id_* && chmod 644 /root/.ssh/*.pub && chmod 700 /root/.ssh && vendor/bin/dep releases $${DEPLOYER_STAGING_HOST}"; \
 	else \
 		echo "Unknown stage: ${stage}"; \
 		exit 1; \
