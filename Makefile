@@ -4,7 +4,7 @@
 stage ?= staging
 # 1. Standard: Wir gehen davon aus, wir sind LOKAL (also Docker nutzen)
 #    Wir mounten .ssh read-only, damit Deployer Keys hat.
-PHP_RUNNER = docker compose run --rm -v $(HOME)/.ssh:/root/.ssh:ro -e HOME=/root --user root php-app
+PHP_RUNNER = docker compose run --rm php-app
 
 # 2. Ausnahme: Wenn wir wirklich in der CI sind (GitHub gibt 'true' zurück)
 #    Dann machen wir die Variable leer -> Befehl läuft nativ
